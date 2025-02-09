@@ -1,0 +1,95 @@
+---
+description: Specific rules for writing javascript custom-elements
+globs: **/custom-elements/**/*.js
+---
+## 1. DOM Usage and Custom Element Construction
+
+- **Avoid Shadow DOM:**
+
+  - **Never** use Shadow DOM on a custom element.
+
+- **Prefer Light DOM:**
+
+  - Always prefer custom elements that work with the Light DOM passed in via HTML.
+  - Leverage the provided HTML elements and handle missing elements gracefully.
+
+- **Minimal DOM Building:**
+
+  - **Rarely** build DOM elements using `document.createElement` or by setting `innerHTML`.
+  - Instead, enhance the existing HTML structure.
+
+- **Event Bubbling:**
+  - Utilize event bubbling to simplify event management and communication.
+
+---
+
+## 2. Event Handling Best Practices
+
+- **Listener Attachment:**
+
+  - Attach event listeners to the custom element itself rather than to its individual child elements.
+
+- **Event Delegation:**
+
+  - Use event delegation and bubbling to manage events from child elements.
+  - Verify the event target and context before handling events.
+
+- **Handler Binding:**
+  - **Avoid** binding event handlers in the constructor when using event delegation (the correct `this` context is already available).
+  - **Bind** event handlers only when they are needed as callbacks for other functions or when event delegation is not used.
+
+---
+
+## 3. Enhancement Patterns
+
+- **Progressive Enhancement:**
+
+  - Enhance existing HTML structures rather than replacing them.
+  - Provide meaningful fallback behavior when JavaScript is disabled.
+
+- **Custom Events and Data Attributes:**
+  - Emit custom events so parent elements can react to component state changes.
+  - Use data attributes to configure behavior while maintaining HTML semantics.
+
+---
+
+## 4. Reactive and State Management
+
+- **Reactive Patterns Over Initialization:**
+
+  - Prefer reactive patterns that respond to events over one-time DOM scans during initialization.
+  - Design custom elements as event-driven controllers rather than static configurators.
+
+- **DOM Reference Management:**
+  - Avoid storing DOM element references as instance properties unless absolutely necessary.
+  - Query DOM elements at the time they’re needed rather than caching them preemptively.
+
+---
+
+## 5. Coupling and Dependencies
+
+- **Maintain Independence:**
+
+  - Ensure custom elements remain independent of their children's internal implementation details.
+  - Avoid tight coupling with the structure of child elements.
+
+- **Event and Attribute Driven:**
+  - Prefer reacting to events and attributes rather than directly manipulating child elements.
+  - Do not assume a specific DOM structure during initialization.
+
+---
+
+## 6. Code Style Guidelines
+
+- **Constructor vs. Lifecycle Methods:**
+
+  - Keep constructors minimal.
+  - Use the `connectedCallback` for setup tasks instead of the constructor.
+
+- **Default to Event Delegation:**
+
+  - Use event delegation as the default pattern.
+  - Avoid unnecessary event handler binding in the constructor when delegation is in place.
+
+- **Method Definitions:**
+  - Write event handlers as regular methods when they are used with event delegation to maintain clarity and consistency.

@@ -1,0 +1,44 @@
+select-trigger {
+  /* Functional variables */
+  --trigger-padding: 8px 12px;
+  --trigger-height: 40px;
+  --trigger-arrow-size: 5px;
+  --trigger-arrow-color: currentColor;
+  --trigger-arrow-spacing: 8px;
+  --trigger-focus-bg: rgba(66, 153, 225, 0.1);
+
+  /* Core functional styles */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--trigger-padding);
+  min-height: var(--trigger-height);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background-color 0.2s ease;
+}
+
+/* Interactive states */
+select-trigger:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+select-trigger:focus {
+  background-color: var(--trigger-focus-bg);
+}
+
+/* Arrow indicator */
+select-trigger::after {
+  content: "";
+  border-style: solid;
+  border-width: var(--trigger-arrow-size) var(--trigger-arrow-size) 0 var(--trigger-arrow-size);
+  border-color: var(--trigger-arrow-color) transparent transparent transparent;
+  margin-left: var(--trigger-arrow-spacing);
+  transition: transform 0.2s ease;
+}
+
+/* Arrow rotation when open */
+select[open] > select-trigger::after {
+  transform: rotate(180deg);
+} 

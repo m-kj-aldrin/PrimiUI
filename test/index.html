@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>test</title>
+
+    <!-- select custom element -->
+    <script type="module" src="../src/custom-elements/Select/root.js"></script>
+    <script type="module" src="../src/custom-elements/Select/item.js"></script>
+    <script type="module" src="../src/custom-elements/Select/trigger.js"></script>
+    <link rel="stylesheet" href="../src/custom-elements/Select/root.style.css" />
+    <link rel="stylesheet" href="../src/custom-elements/Select/item.style.css" />
+    <link rel="stylesheet" href="../src/custom-elements/Select/trigger.style.css" />
+  </head>
+  <body>
+    <select-root placeholder="Select an option">
+      <select-trigger>Select an option</select-trigger>
+      <select-item value="1">Option 1</select-item>
+      <select-item value="2">Option 2</select-item>
+      <select-item value="3">Option 3</select-item>
+      <select-item value="4">Option 4</select-item>
+      <select-item value="5">Option 5</select-item>
+      <select-item value="6" disabled>Option 6</select-item>
+    </select-root>
+  </body>
+</html>

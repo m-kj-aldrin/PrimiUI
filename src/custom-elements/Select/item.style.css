@@ -1,0 +1,40 @@
+select-item {
+  /* Functional variables */
+  --item-padding: 8px 12px;
+  --item-hover-bg: rgba(0, 0, 0, 0.04);
+  --item-focus-bg: rgba(66, 153, 225, 0.1);
+  --item-focus-outline: 2px solid rgba(66, 153, 225, 0.5);
+  --item-selected-bg: rgba(66, 153, 225, 0.1);
+  --item-disabled-opacity: 0.5;
+
+  /* Core functional styles */
+  display: block;
+  padding: var(--item-padding);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease, outline 0.2s ease;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+/* Interactive states */
+select-item:hover:not([disabled]) {
+  background-color: var(--item-hover-bg);
+}
+
+select-item:focus {
+  outline: var(--item-focus-outline);
+  background-color: var(--item-focus-bg);
+  z-index: 2;
+}
+
+select-item[selected] {
+  background-color: var(--item-selected-bg);
+}
+
+/* Disabled state */
+select-item[disabled] {
+  opacity: var(--item-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}

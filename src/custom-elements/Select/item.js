@@ -95,7 +95,7 @@ export class SelectItem extends HTMLElement {
    * @param {KeyboardEvent} event - The keydown event
    */
   #handleKeydown(event) {
-    console.log("Keydown event:", event.key);
+    // console.log("Keydown event:", event.key);
     if (this.hasAttribute("disabled")) return;
 
     if (event.key === "Enter" || event.key === " ") {

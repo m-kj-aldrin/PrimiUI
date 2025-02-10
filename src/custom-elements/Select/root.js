@@ -76,7 +76,7 @@ export class SelectRoot extends HTMLElement {
     #setupDocumentKeydown() {
         this.#documentKeydownHandler = (event) => {
             if (event.key === "Escape" && this.hasAttribute("open")) {
-                console.log("Document Escape pressed, closing select");
+                // console.log("Document Escape pressed, closing select");
                 event.preventDefault();
                 event.stopPropagation();
                 this.removeAttribute("open");
@@ -158,7 +158,7 @@ export class SelectRoot extends HTMLElement {
      * @param {KeyboardEvent} event - The keydown event
      */
     #handleKeydown = (event) => {
-        console.log("Keydown event:", event.key);
+        // console.log("Keydown event:", event.key);
         if (this.hasAttribute("disabled")) return;
 
         if (event.key === "Enter" || event.key === " ") {
@@ -166,7 +166,7 @@ export class SelectRoot extends HTMLElement {
             event.stopPropagation();
 
             if (!this.hasAttribute("open")) {
-                console.log("Opening select with keyboard");
+                // console.log("Opening select with keyboard");
                 this.#isKeyboardOpen = true;
                 this.setAttribute("open", "");
             }

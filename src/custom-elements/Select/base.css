@@ -2,9 +2,14 @@ select-root {
     position: relative;
 
     --select-padding: 4px 4px;
+
     --select-focus-bg: hsl(var(--color-foreground) / var(--color-opacity-1));
     --select-focus-outline: 1px solid
         hsl(var(--color-foreground) / var(--color-opacity-2));
+
+    --select-selected-bg: hsl(var(--color-foreground) / var(--color-opacity-2));
+    --select-selected-outline: 1px solid
+        hsl(var(--color-foreground) / var(--color-opacity-3));
 
     color: var(--color-foreground, black);
 }
@@ -47,10 +52,16 @@ select-root
     :where(select-item, select-trigger):not([disabled]):where(
         :hover,
         :focus,
-        [selected]
+
     ) {
     background-color: var(--select-focus-bg);
     outline: var(--select-focus-outline);
+}
+
+select-root
+    :where(select-item, select-trigger):not([disabled]):where([selected]) {
+    background-color: var(--select-selected-bg);
+    outline: var(--select-selected-outline);
 }
 
 select-root select-item[disabled] {

@@ -255,7 +255,7 @@ export class SelectRoot extends HTMLElement {
      */
     #navigateItems(direction) {
         const items = Array.from(
-            this.querySelectorAll("select-item:not([disabled])")
+            this.querySelectorAll("select-item:not([disabled], [selected])")
         );
         if (!items.length) return;
 
@@ -277,7 +277,7 @@ export class SelectRoot extends HTMLElement {
      * Focuses the first non-disabled item
      */
     #focusFirstItem() {
-        const firstItem = this.querySelector("select-item:not([disabled])");
+        const firstItem = this.querySelector("select-item:not([disabled],[selected])");
         if (firstItem) {
             /** @type {HTMLElement} */ (firstItem).focus();
         }

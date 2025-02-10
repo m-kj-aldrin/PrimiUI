@@ -31,7 +31,7 @@ export class SelectTrigger extends HTMLElement {
    */
   #setupAccessibility() {
     this.setAttribute("role", "button");
-    this.setAttribute("tabindex", "-1");
+    this.setAttribute("tabindex", "0");
     this.setAttribute("aria-haspopup", "listbox");
   }
 

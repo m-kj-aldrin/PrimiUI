@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>test</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>test</title>
 
-    <!-- select custom element -->
-    <script type="module" src="../src/custom-elements/Select/root.js"></script>
-    <script type="module" src="../src/custom-elements/Select/item.js"></script>
-    <script type="module" src="../src/custom-elements/Select/trigger.js"></script>
-    <link rel="stylesheet" href="../src/custom-elements/Select/root.style.css" />
-    <link rel="stylesheet" href="../src/custom-elements/Select/item.style.css" />
-    <link rel="stylesheet" href="../src/custom-elements/Select/trigger.style.css" />
-  </head>
-  <body>
-    <select-root placeholder="Select an option">
-      <select-trigger>Select an option</select-trigger>
-      <select-item value="1">Option 1</select-item>
-      <select-item value="2">Option 2</select-item>
-      <select-item value="3">Option 3</select-item>
-      <select-item value="4">Option 4</select-item>
-      <select-item value="5">Option 5</select-item>
-      <select-item value="6" disabled>Option 6</select-item>
-    </select-root>
-  </body>
+        <link rel="stylesheet" href="style.css" />
+        <script type="module" src="index.js"></script>
+
+        <!-- select custom element -->
+        <script
+            type="module"
+            src="../src/custom-elements/Select/index.js"
+        ></script>
+        <link rel="stylesheet" href="../src/custom-elements/Select/index.css" />
+        <link rel="stylesheet" href="select-extension.css" />
+    </head>
+    <body>
+        <select-root value="sushi" name="favorite-food">
+            <select-trigger>Choose your favorite</select-trigger>
+            <div>
+                <select-item value="pizza">🍕 Pizza Margherita</select-item>
+                <select-item value="sushi">🍣 Fresh Sushi Roll</select-item>
+                <select-item value="taco">🌮 Street Tacos</select-item>
+                <select-item value="coffee">☕️ Hot Coffee</select-item>
+                <select-item value="rocket">🚀 Space Travel</select-item>
+                <select-item value="unicorn" disabled>
+                    🦄 Magic Unicorn
+                </select-item>
+            </div>
+        </select-root>
+    </body>
 </html>

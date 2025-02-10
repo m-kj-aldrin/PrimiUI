@@ -1,0 +1,13 @@
+select-root {
+    border: none;
+}
+
+select-root:not([open]) > div {
+    display: none;
+}
+
+select-root > div {
+    margin-top: 4px;
+    border-radius: var(--select-border-radius);
+    border: var(--select-border);
+}

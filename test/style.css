@@ -5,3 +5,7 @@ body{
 	padding: 4px;
 	margin: 0;
 }
+
+p{
+	background-color: red;
+}

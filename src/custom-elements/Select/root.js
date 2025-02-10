@@ -11,11 +11,8 @@ export class SelectRoot extends HTMLElement {
      * @returns {string[]} Array of attribute names to observe
      */
     static get observedAttributes() {
-        return ["value", "placeholder", "disabled", "open"];
+        return ["value", "disabled", "open"];
     }
-
-    /** @type {HTMLElement | null} */
-    #selectedItem = null;
 
     /** @type {HTMLElement | null} */
     #focusedItem = null;
@@ -76,7 +73,6 @@ export class SelectRoot extends HTMLElement {
     #setupDocumentKeydown() {
         this.#documentKeydownHandler = (event) => {
             if (event.key === "Escape" && this.hasAttribute("open")) {
-                // console.log("Document Escape pressed, closing select");
                 event.preventDefault();
                 event.stopPropagation();
                 this.removeAttribute("open");
@@ -111,17 +107,10 @@ export class SelectRoot extends HTMLElement {
      * @returns {void}
      */
     attributeChangedCallback(name, oldValue, newValue) {
-        // console.log(`Attribute changed: ${name}`, { oldValue, newValue });
         if (name === "value") {
             this.#updateSelectedItem();
-        } else if (name === "placeholder" && !this.getAttribute("value")) {
-            const trigger = this.querySelector("select-trigger");
-            if (trigger) {
-                // trigger.textContent = newValue || "Select an option";
-            }
         } else if (name === "disabled") {
             this.setAttribute("aria-disabled", String(newValue !== null));
-            this.setAttribute("tabindex", newValue !== null ? "-1" : "0");
         } else if (name === "open") {
             this.setAttribute("aria-expanded", String(newValue !== null));
             if (newValue !== null) {
@@ -132,7 +121,7 @@ export class SelectRoot extends HTMLElement {
                 this.#isKeyboardOpen = false;
             } else {
                 this.dispatchEvent(new CustomEvent("close"));
-                this.focus();
+                this.querySelector("select-trigger")?.focus();
             }
         }
     }
@@ -158,7 +147,6 @@ export class SelectRoot extends HTMLElement {
      * @param {KeyboardEvent} event - The keydown event
      */
     #handleKeydown = (event) => {
-        // console.log("Keydown event:", event.key);
         if (this.hasAttribute("disabled")) return;
 
         if (event.key === "Enter" || event.key === " ") {
@@ -166,7 +154,6 @@ export class SelectRoot extends HTMLElement {
             event.stopPropagation();
 
             if (!this.hasAttribute("open")) {
-                // console.log("Opening select with keyboard");
                 this.#isKeyboardOpen = true;
                 this.setAttribute("open", "");
             }
@@ -237,16 +224,17 @@ export class SelectRoot extends HTMLElement {
             const isSelected = item.getAttribute("value") === value;
             item.toggleAttribute("selected", isSelected);
             if (isSelected) {
-                this.#selectedItem = /** @type {HTMLElement} */ (item);
                 if (trigger) {
                     trigger.textContent = item.textContent;
                 }
             }
         });
+    }
 
-        if (!this.#selectedItem && trigger) {
-            // trigger.textContent = this.getAttribute("placeholder") || "Select an option";
-        }
+    #getAvailableItems() {
+        return Array.from(
+            this.querySelectorAll("select-item:not([disabled], [selected])")
+        );
     }
 
     /**
@@ -254,9 +242,7 @@ export class SelectRoot extends HTMLElement {
      * @param {number} direction - The direction to navigate (1 for next, -1 for previous)
      */
     #navigateItems(direction) {
-        const items = Array.from(
-            this.querySelectorAll("select-item:not([disabled], [selected])")
-        );
+        const items = this.#getAvailableItems();
         if (!items.length) return;
 
         const currentIndex = this.#focusedItem
@@ -277,7 +263,9 @@ export class SelectRoot extends HTMLElement {
      * Focuses the first non-disabled item
      */
     #focusFirstItem() {
-        const firstItem = this.querySelector("select-item:not([disabled],[selected])");
+        const firstItem = this.querySelector(
+            "select-item:not([disabled],[selected])"
+        );
         if (firstItem) {
             /** @type {HTMLElement} */ (firstItem).focus();
         }

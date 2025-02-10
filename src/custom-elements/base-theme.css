@@ -1,0 +1,10 @@
+:root {
+    --color-foreground: 0 0% 0%;
+    --color-background: 0 0% 100%;
+    --color-opacity-1: 0.1;
+    --color-opacity-2: 0.3;
+    --color-opacity-3: 0.5;
+    --color-opacity-4: 0.7;
+    --color-opacity-5: 0.9;
+    --color-opacity-full: 1;
+}

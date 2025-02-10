@@ -1,35 +1,22 @@
-select-trigger {
-    /* Functional variables */
-    --trigger-padding: 8px 8px;
-    --trigger-height: 4px;
-    --trigger-arrow-size: 5px;
-    --trigger-arrow-color: currentColor;
-    --trigger-arrow-spacing: 8px;
-
-    --trigger-focus-bg: var(--select-focus-bg);
-    --trigger-focus-outline: var(--select-focus-outline);
-    --trigger-border: var(--select-border);
-
-    display: inline-block;
-    border: var(--trigger-border);
-    border-radius: var(--select-border-radius);
-    align-items: center;
+select-trigger,
+select-item {
+    display: block;
     width: max-content;
-    padding: var(--trigger-padding);
-
-    min-height: var(--trigger-height);
     cursor: pointer;
     user-select: none;
-    outline: none;
-    transition: background-color 0.2s ease;
+    white-space: nowrap;
+}
+select-trigger {
+    padding: var(--select-trigger-padding);
+    border: var(--select-trigger-border);
+    border-radius: var(--select-border-radius);
 }
 
-/* Interactive states */
 select-trigger:hover {
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: var(--select-trigger-hover-bg);
 }
 
 select-trigger:focus {
-    background-color: var(--trigger-focus-bg);
-    outline: var(--trigger-focus-outline);
+    background-color: var(--select-trigger-focus-bg);
+    outline: none;
 }

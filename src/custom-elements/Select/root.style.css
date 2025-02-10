@@ -1,22 +1,26 @@
 select-root {
-    /* Functional variables for core behavior */
     --select-border: 1px solid #e2e8f0;
     --select-border-radius: 2px;
     --select-bg: white;
-    --select-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.05);
-    --select-focus-ring: 0 0 0 2px rgba(66, 153, 225, 0.5);
-    --select-focus-border: #3182ce;
-    --select-content-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --select-disabled-opacity: 0.5;
-
-    --select-focus-outline: 2px solid rgba(66, 153, 225, 0.5);
+    --select-focus-outline: 1px solid rgba(66, 153, 225, 0.5);
     --select-focus-bg: rgba(66, 153, 225, 0.1);
+    --select-padding: 8px 8px;
+
+    /* trigger */
+    --select-trigger-hover-bg: var(--select-item-hover-bg);
+    --select-trigger-focus-bg: var(--select-focus-bg);
+    --select-trigger-border: var(--select-border);
+    --select-trigger-padding: var(--select-padding);
+
+    /* item */
+    --select-item-hover-bg: rgba(0, 0, 0, 0.04);
+    --select-item-focus-bg: var(--select-focus-bg);
+    --select-item-padding: var(--select-padding);
+    --select-item-disabled-opacity: 0.5;
 
     display: inline-block;
 }
 
-/* State-based styling */
 select-root:focus {
     outline: none;
 }
@@ -27,41 +31,6 @@ select-root[disabled] {
     pointer-events: none;
 }
 
-/* Open state modifications */
-select-root[open] {
-}
-
-/* Item visibility control */
 select-root:not([open]) select-item {
     display: none;
-}
-
-/* Dropdown positioning and styling */
-select-root[open] select-item {
-}
-
-select-root[open] select-item:last-child {
-    border-bottom: none;
-    border-bottom-left-radius: var(--select-border-radius);
-    border-bottom-right-radius: var(--select-border-radius);
-}
-
-/* Scrollbar styles for webkit browsers */
-select-root .select-dropdown::-webkit-scrollbar {
-    width: 8px;
-}
-
-select-root .select-dropdown::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-select-root .select-dropdown::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-}
-
-select-root .select-dropdown::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.3);
 }

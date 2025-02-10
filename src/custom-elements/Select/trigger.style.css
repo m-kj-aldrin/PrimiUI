@@ -1,12 +1,12 @@
 select-trigger,
 select-item {
     display: block;
-    width: max-content;
     cursor: pointer;
     user-select: none;
     white-space: nowrap;
 }
 select-trigger {
+    width: max-content;
     padding: var(--select-trigger-padding);
     border: var(--select-trigger-border);
     border-radius: var(--select-border-radius);

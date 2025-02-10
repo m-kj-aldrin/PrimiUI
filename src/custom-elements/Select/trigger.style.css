@@ -4,7 +4,10 @@ select-item {
     cursor: pointer;
     user-select: none;
     white-space: nowrap;
+
+    background-color: var(--select-bg);
 }
+
 select-trigger {
     width: max-content;
     padding: var(--select-trigger-padding);

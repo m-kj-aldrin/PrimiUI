@@ -1,11 +1,15 @@
 select-root {
     --select-padding: 4px 4px;
 
-    --select-focus-bg: hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-2, 0.2));
+    --select-focus-bg: hsl(
+        var(--color-foreground, 0 0% 0%) / var(--color-opacity-2, 0.2)
+    );
     --select-focus-outline: var(--border-width, 1px) solid
         hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-3, 0.3));
 
-    --select-selected-bg: hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-3, 0.3));
+    --select-selected-bg: hsl(
+        var(--color-foreground, 0 0% 0%) / var(--color-opacity-3, 0.3)
+    );
     --select-selected-outline: var(--border-width, 1px) solid
         hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-4, 0.4));
 
@@ -17,9 +21,11 @@ select-root select-trigger {
     user-select: none;
     -webkit-user-select: none;
 
+    border-radius: var(--border-radius, 2px);
     background-color: hsl(var(--color-background, 0 0% 100%));
     border: var(--border-width, 1px)
-        hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-1, 0.1)) solid;
+        hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-1, 0.1))
+        solid;
 }
 
 select-root select-item,

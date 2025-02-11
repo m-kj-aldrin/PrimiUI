@@ -1,157 +1,162 @@
 ---
+description: 
+globs: 
+---
+---
 description: General rules for writing javascript
 globs: **/*.js
 ---
+
 ## 1. ECMAScript 2022 and ES Modules
 
-- **Modern Language Features:**
-  - Write your code using ECMAScript 2022 standards. Leverage modern syntax (e.g., optional chaining, nullish coalescing, top-level await) to improve clarity and efficiency.
-- **Module System:**
+-   **Modern Language Features:**
+    -   Write your code using ECMAScript 2022 standards. Leverage modern syntax (e.g., optional chaining, nullish coalescing, top-level await) to improve clarity and efficiency.
+-   **Module System:**
 
-  - Use ES modules exclusively. Structure your project into self-contained modules that use `import` and `export` statements.
-  - **Example:**
+    -   Use ES modules exclusively. Structure your project into self-contained modules that use `import` and `export` statements.
+    -   **Example:**
 
-    ```js
-    // utils.js
-    export function helper() {
-      // implementation
-    }
+        ```js
+        // utils.js
+        export function helper() {
+            // implementation
+        }
 
-    // main.js
-    import { helper } from "./utils.js";
-    ```
+        // main.js
+        import { helper } from "./utils.js";
+        ```
 
 ---
 
 ## 2. Classes and Encapsulation
 
-- **Encapsulated State:**
+-   **Encapsulated State:**
 
-  - When using classes, prefer `#private` fields to encapsulate internal state and methods.
-  - **Example:**
+    -   When using classes, prefer `#private` fields to encapsulate internal state and methods.
+    -   **Example:**
 
-    ```js
-    export class MyComponent {
-      #state;
+        ```js
+        export class MyComponent {
+            #state;
 
-      constructor(initialState) {
-        this.#state = initialState;
-      }
+            constructor(initialState) {
+                this.#state = initialState;
+            }
 
-      /**
-       * Returns the current state.
-       * @returns {any}
-       */
-      getState() {
-        return this.#state;
-      }
-    }
-    ```
+            /**
+             * Returns the current state.
+             * @returns {any}
+             */
+            getState() {
+                return this.#state;
+            }
+        }
+        ```
 
-- **Focused Responsibilities:**
-  - Keep classes focused by abstracting functionality into well-defined methods and separate modules where appropriate.
+-   **Focused Responsibilities:**
+    -   Keep classes focused by abstracting functionality into well-defined methods and separate modules where appropriate.
 
 ---
 
 ## 3. Modular Code and Abstraction
 
-- **Modularity:**
-  - Write your code as a collection of independent, reusable functions and modules. This helps in abstracting logic and makes unit testing simpler.
-- **Abstract Functions:**
-  - Abstract common functionalities into helper functions or utility modules to promote code reuse and reduce duplication.
+-   **Modularity:**
+    -   Write your code as a collection of independent, reusable functions and modules. This helps in abstracting logic and makes unit testing simpler.
+-   **Abstract Functions:**
+    -   Abstract common functionalities into helper functions or utility modules to promote code reuse and reduce duplication.
 
 ---
 
 ## 4. Dependency Management
 
-- **Self-Contained Code:**
-  - Avoid relying on external dependencies. The code should be fully self-contained to minimize external coupling and simplify deployment.
+-   **Self-Contained Code:**
+    -   Avoid relying on external dependencies. The code should be fully self-contained to minimize external coupling and simplify deployment.
 
 ---
 
 ## 5. Documentation with JSDoc
 
-- **Comprehensive Documentation:**
+-   **Comprehensive Documentation:**
 
-  - Use JSDoc to document every module, class, function, and method. Include descriptions, parameter types, return types, and usage examples.
-  - **Example:**
-    ```js
-    /**
-     * Adds two numbers.
-     * @param {number} a - The first number.
-     * @param {number} b - The second number.
-     * @returns {number} The sum of a and b.
-     */
-    export function add(a, b) {
-      return a + b;
-    }
-    ```
+    -   Use JSDoc to document every module, class, function, and method. Include descriptions, parameter types, return types, and usage examples.
+    -   **Example:**
+        ```js
+        /**
+         * Adds two numbers.
+         * @param {number} a - The first number.
+         * @param {number} b - The second number.
+         * @returns {number} The sum of a and b.
+         */
+        export function add(a, b) {
+            return a + b;
+        }
+        ```
 
-- **Type Hints with TypeScript Functionality:**
-  - For complex types, leverage TypeScript-inspired syntax within your JSDoc annotations to ensure clear, robust type definitions.
+-   **Type Hints with TypeScript Functionality:**
+    -   For complex types, leverage TypeScript-inspired syntax within your JSDoc annotations to ensure clear, robust type definitions.
 
 ---
 
 ## 6. Advanced Generics and Type Annotations
 
-- **Defining Generics:**
+-   **Defining Generics:**
 
-  - Use the `@template` tag in JSDoc to define generic type parameters for functions, classes, or type definitions.
-  - **Example:**
-    ```js
-    /**
-     * Returns the first element of an array.
-     * @template T
-     * @param {T[]} arr - An array of elements of type T.
-     * @returns {T} The first element of the array.
-     */
-    export function first(arr) {
-      return arr[0];
-    }
-    ```
+    -   Use the `@template` tag in JSDoc to define generic type parameters for functions, classes, or type definitions.
+    -   **Example:**
+        ```js
+        /**
+         * Returns the first element of an array.
+         * @template T
+         * @param {T[]} arr - An array of elements of type T.
+         * @returns {T} The first element of the array.
+         */
+        export function first(arr) {
+            return arr[0];
+        }
+        ```
 
-- **Passing Values and Leveraging Type Inference:**
+-   **Passing Values and Leveraging Type Inference:**
 
-  - Design functions so that the generic type can be inferred from the arguments. This minimizes the need for explicit generic parameter declarations.
-  - **Example:**
-    ```js
-    /**
-     * Wraps a value in an object.
-     * @template T
-     * @param {T} value - The value to wrap.
-     * @returns {{ value: T }} An object containing the value.
-     */
-    export function wrap(value) {
-      return { value };
-    }
-    ```
+    -   Design functions so that the generic type can be inferred from the arguments. This minimizes the need for explicit generic parameter declarations.
+    -   **Example:**
+        ```js
+        /**
+         * Wraps a value in an object.
+         * @template T
+         * @param {T} value - The value to wrap.
+         * @returns {{ value: T }} An object containing the value.
+         */
+        export function wrap(value) {
+            return { value };
+        }
+        ```
 
-- **Using Conditional Types:**
+-   **Using Conditional Types:**
 
-  - For advanced type scenarios, integrate conditional types within your JSDoc annotations to dynamically determine types based on conditions.
-  - **Example:**
-    ```js
-    /**
-     * @template T
-     * @typedef {T extends string ? number : boolean} ConditionalType
-     */
-    ```
+    -   For advanced type scenarios, integrate conditional types within your JSDoc annotations to dynamically determine types based on conditions.
+    -   **Example:**
+        ```js
+        /**
+         * @template T
+         * @typedef {T extends string ? number : boolean} ConditionalType
+         */
+        ```
 
-- **Encourage Generic Reuse:**
-  - Prefer writing functions and classes as generically as possible to maximize reuse. Let the type inference handle most cases while providing explicit annotations for clarity.
+-   **Encourage Generic Reuse:**
+    -   Prefer writing functions and classes as generically as possible to maximize reuse. Let the type inference handle most cases while providing explicit annotations for clarity.
 
 ---
 
 ## 7. Externalizing Types
 
-- **External Type Definitions:**
+-   **External Type Definitions:**
 
-  - When your project requires complex or shared type definitions, externalize these types into separate files.
-  - Reference these external type files using triple-slash directives.
-  - **Example:**
-    ```js
-    /// <reference path="path/to/types.js" />
-    ```
+    -   When your project requires complex or shared type definitions, externalize these types into separate files.
+    -   Reference these external type files using triple-slash directives.
+    -   **Example:**
+        ```js
+        /// <reference path="path/to/types.js" />
+        ```
 
-- **Maintain a Centralized Type Library:**
-  - Keep a dedicated types file or directory for complex types that can be referenced across modules, ensuring consistency and easier maintenance.
+-   **Maintain a Centralized Type Library:**
+    -   Keep a dedicated types file or directory for complex types that can be referenced across modules, ensuring consistency and easier maintenance.

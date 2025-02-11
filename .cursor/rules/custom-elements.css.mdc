@@ -1,115 +1,148 @@
 ---
+description: 
+globs: 
+---
+---
 description: Specific rules for writing styles for custom-elements
 globs: **/custom-elements/**/*.css
 ---
-## 1. Custom Element Selectors
 
-- **Direct Targeting:**
+# Custom Element CSS Guidelines
 
-  - Always target custom elements by their tag names (e.g., `my-custom-element`) to ensure that styles apply directly to the intended components.
-  - **Example:**
-    ```css
-    my-custom-element {
-      /* Base functional styles for the custom element */
-    }
-    ```
+Your CSS work for custom elements should follow two key aspects:
 
-- **Attribute-Based Styling:**
-  - Prefer styling based on custom attributes to indicate state or variants. Use attributes like `[active]`, `[open]`, or `[variant="primary"]` to signal different functional states.
-  - **Example:**
-    ```css
-    my-custom-element[active] {
-      /* Styles when the element is in an active state */
-    }
-    ```
+1. **File Structure and Asset Organization**
+2. **CSS Best Practices for Custom Elements**
 
 ---
 
-## 2. Parent-Child Relationships
+## 1. File Structure and Asset Organization
 
-- **Defining Structure:**
+To promote a clear separation of concerns between functionality and aesthetics, every custom element must be split into two CSS files:
 
-  - When a custom element contains related custom elements (e.g., `my-custom-child-element` inside `my-custom-element`), define the relationships explicitly using descendant or child selectors.
-  - **Example:**
-    ```css
-    my-custom-element my-custom-child-element {
-      /* Styles for child elements within the custom element */
-    }
-    ```
+-   **Functional UX Styling:**
 
-- **State-Driven Interactions:**
-  - Combine attribute selectors with parent-child relationships to enforce expected interactions. For instance, an element may change how its child elements are displayed based on a state attribute.
-  - **Example:**
-    ```css
-    my-custom-element:not([active]) my-custom-child-element {
-      display: none;
-    }
-    ```
+    -   **File Name:** `[custom-element-name].ux.css`
+    -   **Purpose:** Contains the essential CSS that enables the proper user experience and behavior of the custom element. This file focuses on functional interactions such as state changes, layout adjustments, and visibility toggles.
+
+-   **Aesthetic Styling:**
+    -   **File Name:** `[custom-element-name].style.css`
+    -   **Purpose:** Contains the visual styling rules (colors, fonts, decorative elements) that can be easily customized. This file uses CSS custom properties and references values from an external `base-style.css` (which is not part of the custom element) so that visual themes can be adjusted independently of the element’s core functionality.
+
+This split ensures that:
+
+-   The **UX file** holds only the minimal styles necessary for the element to operate correctly.
+-   The **Style file** offers flexible, theme-based styling that users can adjust without risking the component’s functionality.
 
 ---
 
-## 3. Functional Focus Over Aesthetic Flourishes
+## 2. CSS Best Practices for Custom Elements
 
-- **Core Interactions:**
+### **Custom Element Selectors**
 
-  - Focus on ensuring that the CSS implements the necessary UI/UX interactions of the custom element. For instance, handle state changes, visibility toggles, and other core behaviors required by the component.
-  - Avoid incorporating decorative embellishments such as icons, shadows, or advanced animations unless they are explicitly part of the required functionality.
+-   **Direct Targeting:**
 
-- **Separation of Concerns:**
+    -   Always target custom elements by their tag names (e.g., `my-custom-element`) to ensure that styles apply directly to the intended components.
+    -   **Example:**
+        ```css
+        my-custom-element {
+            /* Base functional styles for the custom element */
+            display: flex; /* Using flex for layout can be critical to component functionality */
+        }
+        ```
 
-  - Include only the styling needed to support the component’s behavior. Leave room for additional aesthetic customization through separate themes or additional style rules when explicitly instructed.
-  - **Example:**
-
-    ```css
-    my-custom-element {
-      border: 1px solid #ccc; /* Functional boundary indicator */
-    }
-
-    my-custom-element[active] my-custom-child-element {
-      cursor: pointer; /* Functional interactivity cue */
-    }
-    ```
-
----
-
-## 4. Specificity, Inheritance, and Custom Properties
-
-- **Cascading and Overrides:**
-
-  - Leverage CSS’s natural cascading behavior to set base styles for custom elements and then override them with more specific attribute or parent-child selectors when necessary.
-  - Avoid overly specific selectors that may interfere with the component’s functional behavior.
-
-- **Custom Properties for Consistency:**
-  - Use CSS custom properties (e.g., `--primary-color`, `--spacing`) to define key functional style values. This supports consistency and simplifies adjustments for responsiveness or theme changes.
-  - **Example:**
-    ```css
-    my-custom-element {
-      --element-border: 1px solid #ccc;
-      border: var(--element-border);
-    }
-    ```
+-   **Attribute-Based Styling:**
+    -   Prefer styling based on custom attributes to indicate state or variants. Use attributes like `[active]`, `[open]`, or `[variant="primary"]` to signal different functional states.
+    -   **Example:**
+        ```css
+        my-custom-element[active] {
+            /* Styles when the element is in an active state */
+        }
+        ```
 
 ---
 
-## 5. Maintainability and Readability
+### **Parent-Child Relationships**
 
-- **Focused and Minimal Rules:**
+-   **Defining Structure:**
 
-  - Group related rules together (base styles, state-driven modifications, and parent-child relationships) to keep the CSS maintainable and readable.
-  - Clearly comment your code to indicate which rules are supporting core functionality versus optional aesthetic enhancements.
-  - **Example:**
+    -   When a custom element contains related custom elements (e.g., `my-custom-child-element` inside `my-custom-element`), define the relationships explicitly using descendant or child selectors.
+    -   **Example:**
+        ```css
+        my-custom-element my-custom-child-element {
+            /* Styles for child elements within the custom element */
+        }
+        ```
 
-    ```css
-    /* Functional styles to support component behavior */
-    my-custom-element:not([active]) my-custom-child-element {
-      display: none;
-    }
+-   **State-Driven Interactions:**
+    -   Combine attribute selectors with parent-child relationships to enforce expected interactions. For example, a parent element might alter how its child elements display based on a state attribute.
+    -   **Example:**
+        ```css
+        my-custom-element:not([active]) my-custom-child-element {
+            display: none; /* Functionally hides inactive child elements */
+        }
+        ```
 
-    /* Minimal visual cues for interactivity */
-    my-custom-element my-custom-child-element {
-      cursor: pointer;
-    }
-    ```
+---
 
-- **Consistency Across Components:**
-  - Apply these guidelines consistently for all custom elements. This ensures that each component focuses on delivering the expected functionality, while aesthetic adjustments are only added when explicitly defined.
+### **Functional Focus Over Aesthetic Flourishes**
+
+-   **Core Interactions:**
+
+    -   Concentrate on ensuring that the CSS implements the necessary UI/UX interactions of the custom element. This includes managing state changes, toggling visibility, and arranging layout components.
+    -   **Example:**
+        ```css
+        /* Functional styles to support component behavior */
+        my-custom-element {
+            display: flex;
+            flex-direction: column; /* Layout setup critical for component functionality */
+        }
+        my-custom-element[active] my-custom-child-element {
+            cursor: pointer; /* Indicates interactive areas for functionality */
+        }
+        ```
+
+-   **Separation of Concerns:**
+    -   Include only the styling needed to support the component’s behavior. Reserve additional decorative or thematic styling (such as colors or shadows) for the aesthetic file (`[custom-element-name].style.css`).
+
+---
+
+### **Specificity, Inheritance, and Custom Properties**
+
+-   **Cascading and Overrides:**
+
+    -   Leverage CSS’s natural cascading behavior by setting base styles for custom elements and overriding them with more specific selectors when needed.
+    -   Avoid overly specific selectors that might interfere with the component’s intended behavior.
+
+-   **Custom Properties for Consistency:**
+    -   Use CSS custom properties (e.g., `--primary-color`, `--spacing`) to define key style values. This practice ensures consistency and simplifies theme adjustments.
+    -   **Example:**
+        ```css
+        my-custom-element {
+            --element-layout-gap: 1rem;
+            gap: var(--element-layout-gap);
+        }
+        ```
+
+---
+
+### **Maintainability and Readability**
+
+-   **Focused and Minimal Rules:**
+
+    -   Group related rules (base styles, state modifications, parent-child relationships) together to keep your CSS organized and maintainable.
+    -   Comment your code clearly to distinguish between core functional styles and optional aesthetic enhancements.
+    -   **Example:**
+        ```css
+        /* Functional styles to support component behavior */
+        my-custom-element:not([active]) my-custom-child-element {
+            display: none;
+        }
+        /* Functional interactivity cue */
+        my-custom-element[active] my-custom-child-element {
+            cursor: pointer;
+        }
+        ```
+
+-   **Consistency Across Components:**
+    -   Apply these guidelines uniformly across all custom elements to ensure predictable behavior and ease of maintenance.

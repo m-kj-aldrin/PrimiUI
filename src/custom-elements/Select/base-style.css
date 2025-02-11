@@ -1,47 +1,56 @@
 select-root {
-  --select-padding: 4px 4px;
+    --select-padding: 4px 4px;
 
-  --select-focus-bg: hsl(var(--color-foreground) / var(--color-opacity-1));
-  --select-focus-outline: 1px solid hsl(var(--color-foreground) / var(--color-opacity-2));
+    --select-focus-bg: hsl(var(--color-foreground) / var(--color-opacity-1));
+    --select-focus-outline: 1px solid
+        hsl(var(--color-foreground) / var(--color-opacity-2));
 
-  --select-selected-bg: hsl(var(--color-foreground) / var(--color-opacity-2));
-  --select-selected-outline: 1px solid hsl(var(--color-foreground) / var(--color-opacity-3));
+    --select-selected-bg: hsl(var(--color-foreground) / var(--color-opacity-2));
+    --select-selected-outline: 1px solid
+        hsl(var(--color-foreground) / var(--color-opacity-3));
 
-  color: var(--color-foreground, black);
+    color: var(--color-foreground, black);
 }
 
 select-root select-content,
 select-root select-trigger {
-  user-select: none;
-  -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
 
-  background-color: hsl(var(--color-background));
-  border: 1px hsl(var(--color-foreground) / var(--color-opacity-1)) solid;
+    background-color: hsl(var(--color-background, 0 0% 100%));
+    border: var(--border-width, 1px)
+        hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-1, 1)) solid;
 }
 
 select-root select-item,
 select-root select-trigger {
-  white-space: nowrap;
-  cursor: pointer;
+    white-space: nowrap;
+    cursor: pointer;
 
-  padding: var(--select-padding);
+    padding: var(--select-padding);
 }
 
-select-root :where(select-item, select-trigger):not([disabled]):where(:hover, :focus, ) {
-  background-color: var(--select-focus-bg);
-  outline: var(--select-focus-outline);
+select-root
+    :where(select-item, select-trigger):not([disabled]):where(
+        :hover,
+        :focus,
+
+    ) {
+    background-color: var(--select-focus-bg);
+    outline: var(--select-focus-outline);
 }
 
-select-root :where(select-item, select-trigger):not([disabled]):where([selected]) {
-  background-color: var(--select-selected-bg);
-  outline: var(--select-selected-outline);
+select-root
+    :where(select-item, select-trigger):not([disabled]):where([selected]) {
+    background-color: var(--select-selected-bg);
+    outline: var(--select-selected-outline);
 }
 
 select-root select-item[disabled] {
-  opacity: var(--color-opacity-2);
-  cursor: not-allowed;
+    opacity: var(--color-opacity-2);
+    cursor: not-allowed;
 }
 
 select-root select-content {
-  margin-top: var(--select-gap, 4px);
+    margin-top: var(--select-gap, 4px);
 }

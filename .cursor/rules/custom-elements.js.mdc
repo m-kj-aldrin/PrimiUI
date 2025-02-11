@@ -9,123 +9,82 @@ globs: **/custom-elements/**/*.js
 
 # Custom Element Development Guidelines
 
-These guidelines ensure that your custom elements are robust, maintainable, and easily styled. The instructions cover how to build custom elements without relying on Shadow DOM, favor event delegation, and split files to separate functional styles from aesthetic styling.
+These guidelines are intended to complement the general JavaScript rules. They focus on best practices for building robust, maintainable custom elements that work with the Light DOM, leverage event delegation, and maintain a clear separation between functionality and aesthetics.
 
 ---
 
-## 1. DOM Usage and Custom Element Construction
+## 1. DOM Management & Element Construction
 
--   **Avoid Shadow DOM:**
+-   **Avoid Shadow DOM:**  
+    Do not use Shadow DOM on custom elements.
 
-    -   **Never** use Shadow DOM on a custom element.
+-   **Prefer Light DOM:**  
+    Design custom elements to work with and enhance the existing Light DOM structure.  
+    Handle any missing elements gracefully.
 
--   **Prefer Light DOM:**
+-   **Minimal DOM Manipulation:**  
+    Refrain from frequently creating new DOM elements (via `document.createElement` or setting `innerHTML`). Instead, work with the HTML already present.
 
-    -   Design custom elements to work with the Light DOM provided in the HTML.
-    -   Leverage existing HTML elements and handle any missing elements gracefully.
-
--   **Minimal DOM Building:**
-
-    -   **Rarely** create new DOM elements using `document.createElement` or by setting `innerHTML`.
-    -   Instead, enhance and work with the HTML structure already in place.
-
--   **Event Bubbling:**
-    -   Utilize event bubbling to simplify event management and component communication.
+-   **Event Bubbling:**  
+    Leverage native event bubbling to manage events and enable effective component communication.
 
 ---
 
-## 2. Event Handling Best Practices
-
--   **Listener Attachment:**
-
-    -   Attach event listeners to the custom element itself rather than individual child elements.
+## 2. Event Handling & Lifecycle Management
 
 -   **Event Delegation:**
 
-    -   Use event delegation and bubbling to manage events from child elements.
-    -   Always verify the event target and context before processing the event.
+    -   Attach a single event listener to the custom element itself rather than to multiple child elements.
+    -   Rely on event delegation and bubbling, ensuring that you always verify the event target and context before processing.
 
--   **Handler Binding:**
-    -   **Avoid** binding event handlers in the constructor when event delegation is in use (the correct `this` context is already available).
-    -   **Bind** event handlers only when they are required as callbacks or when not using delegation.
+-   **Handler Binding & Lifecycle Methods:**
 
----
+    -   Bind event handlers only when necessary (e.g., when they are used as callbacks outside the delegated context).
+    -   Keep the constructor minimal. Perform setup tasks (including attaching event listeners) in the `connectedCallback` rather than in the constructor.
 
-## 3. Enhancement Patterns
-
--   **Progressive Enhancement:**
-
-    -   Enhance the existing HTML structure rather than replacing it entirely.
-    -   Provide meaningful fallback behavior for when JavaScript is disabled.
-
--   **Custom Events and Data Attributes:**
-    -   Emit custom events so that parent elements can respond to component state changes.
-    -   Use data attributes to configure behavior while maintaining clear HTML semantics.
+-   **Method Definitions:**  
+    Define event handlers as regular class methods (avoid inline arrow functions) to ensure clarity and the proper `this` context.
 
 ---
 
-## 4. Reactive and State Management
+## 3. Enhancement & Reactive Patterns
 
--   **Reactive Patterns Over Initialization:**
+-   **Progressive Enhancement:**  
+    Enhance the existing HTML structure instead of replacing it entirely. Provide sensible fallback behavior for users with JavaScript disabled.
 
-    -   Favor reactive patterns that respond to events rather than a one-time DOM scan during initialization.
-    -   Design custom elements as event-driven controllers rather than static configurators.
+-   **Custom Events & Data Attributes:**
 
--   **DOM Reference Management:**
-    -   Avoid storing DOM element references as instance properties unless absolutely necessary.
-    -   Query the DOM when needed rather than caching elements preemptively.
+    -   Emit custom events to notify parent elements about state changes.
+    -   Use data attributes for configuration to maintain clear, semantic HTML.
 
----
-
-## 5. Coupling and Dependencies
-
--   **Maintain Independence:**
-
-    -   Ensure custom elements remain independent from the internal implementations of their children.
-    -   Avoid tight coupling with the structure of child elements.
-
--   **Event and Attribute Driven:**
-    -   React to events and attributes rather than manipulating child elements directly.
-    -   Do not assume a fixed DOM structure during initialization.
+-   **Reactive Patterns:**  
+    Favor event-driven, reactive patterns over performing a one-time scan of the DOM during initialization.  
+    Avoid caching DOM references as instance properties unless absolutely necessary; query the DOM on demand.
 
 ---
 
-## 6. Code Style Guidelines
+## 4. Coupling & Dependencies
 
--   **Constructor vs. Lifecycle Methods:**
-
-    -   Keep constructors minimal.
-    -   Use `connectedCallback` for setup tasks instead of the constructor.
-
--   **Default to Event Delegation:**
-
-    -   Use event delegation as the default approach.
-    -   Avoid binding unnecessary event handlers in the constructor when delegation is sufficient.
-
--   **Method Definitions:**
-    -   Write event handlers as regular methods (not inline arrow functions) when they are used with event delegation, ensuring clarity and consistency.
+-   **Maintain Loose Coupling:**  
+    Keep custom elements independent of their children’s internal implementations.  
+    React to events and attribute changes rather than directly manipulating child elements or assuming a fixed DOM structure.
 
 ---
 
-## 7. File Structure and Asset Organization
+## 5. File Structure & Asset Organization
 
-To ensure a clean separation between functionality and aesthetics, each custom element must be split into three separate files:
+Organize each custom element into three separate files to enforce a clear separation between functionality and aesthetics:
 
 -   **JavaScript Implementation:**
 
     -   **File Name:** `[custom-element-name].js`
-    -   **Purpose:** Contains the custom element definition, registration, and associated business logic.
+    -   **Purpose:** Contains the custom element definition, registration, and business logic.
 
 -   **Functional UX Styling:**
 
     -   **File Name:** `[custom-element-name].ux.css`
-    -   **Purpose:** Provides the essential CSS for the custom element’s functionality and user experience. This file includes only the styles needed for proper operation and interaction, not for visual embellishments.
+    -   **Purpose:** Provides the essential CSS rules needed for the element’s operation and user interaction.
 
 -   **Aesthetic Styling:**
     -   **File Name:** `[custom-element-name].style.css`
-    -   **Purpose:** Contains aesthetic styling rules using custom properties. These styles reference values from an external `base-style.css` (which is not part of the custom element), allowing users to easily customize the visual appearance without modifying the functional CSS.
-
-This file split ensures that:
-
--   The core functionality is preserved and maintained independently.
--   Developers or users can adjust the aesthetics (look and feel) without risking the functional behavior of the element.
+    -   **Purpose:** Contains visual styling rules that use custom properties and reference an external `base-style.css`. This separation allows users to adjust the look and feel without affecting the functional styles.

@@ -14,7 +14,7 @@ export class SelectRoot extends HTMLElement {
         return ["x-value", "x-disabled", "x-open"];
     }
 
-    /** @type {HTMLElement | null} */
+    /** @type {import("./item").SelectItem | null} */
     #focusedItem = null;
 
     /** @type {(e: MouseEvent) => void} */
@@ -39,7 +39,6 @@ export class SelectRoot extends HTMLElement {
         // Set ARIA attributes
         this.setAttribute("role", "combobox");
         this.setAttribute("aria-haspopup", "listbox");
-        // this.setAttribute("tabindex", "0");
 
         // Setup event listeners
         this.addEventListener("click", this.#handleClick);

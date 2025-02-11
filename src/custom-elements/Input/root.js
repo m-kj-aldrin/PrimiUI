@@ -22,7 +22,7 @@ class InputRoot extends HTMLElement {
     }
 
     get name() {
-        return this.getAttribute("name") ?? "";
+        return this.getAttribute("x-name") ?? "";
     }
 
     /**
@@ -44,6 +44,8 @@ class InputRoot extends HTMLElement {
      */
     disconnectedCallback() {
         this.removeEventListener("input-input", this.#handleInput);
+        this.removeEventListener("keydown", this.#handleKeyDown);
+        this.removeEventListener("focusout", this.#handleBlur);
     }
 
     /**
@@ -76,7 +78,6 @@ class InputRoot extends HTMLElement {
      */
     #handleInput(event) {
         event.stopPropagation();
-
         this.dispatchEvent(new Event("input", { bubbles: true }));
     }
 }

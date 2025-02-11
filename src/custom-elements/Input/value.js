@@ -8,6 +8,8 @@ class InputValue extends HTMLElement {
 
     connectedCallback() {
         this.setAttribute("contenteditable", "true");
+        this.setAttribute("role", "textbox");
+        this.setAttribute("aria-multiline", "false");
 
         this.addEventListener("input", this.#handleInput);
         this.addEventListener("keydown", this.#handleKeyDown);

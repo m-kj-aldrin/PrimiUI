@@ -35,6 +35,7 @@ select-root[open] select-content {
 select-root select-content,
 select-root select-trigger {
     user-select: none;
+    -webkit-user-select: none;
 
     background-color: hsl(var(--color-background));
     border: 1px hsl(var(--color-foreground) / var(--color-opacity-1)) solid;

@@ -11,7 +11,7 @@ export class SelectRoot extends HTMLElement {
      * @returns {string[]} Array of attribute names to observe
      */
     static get observedAttributes() {
-        return ["value", "disabled", "open"];
+        return ["x-value", "x-disabled", "x-open"];
     }
 
     /** @type {HTMLElement | null} */
@@ -72,10 +72,10 @@ export class SelectRoot extends HTMLElement {
      */
     #setupDocumentKeydown() {
         this.#documentKeydownHandler = (event) => {
-            if (event.key === "Escape" && this.hasAttribute("open")) {
+            if (event.key === "Escape" && this.hasAttribute("x-open")) {
                 event.preventDefault();
                 event.stopPropagation();
-                this.removeAttribute("open");
+                this.removeAttribute("x-open");
             }
         };
         document.addEventListener(
@@ -107,11 +107,11 @@ export class SelectRoot extends HTMLElement {
      * @returns {void}
      */
     attributeChangedCallback(name, oldValue, newValue) {
-        if (name === "value") {
+        if (name === "x-value") {
             this.#updateSelectedItem();
-        } else if (name === "disabled") {
+        } else if (name === "x-disabled") {
             this.setAttribute("aria-disabled", String(newValue !== null));
-        } else if (name === "open") {
+        } else if (name === "x-open") {
             this.setAttribute("aria-expanded", String(newValue !== null));
             if (newValue !== null) {
                 this.dispatchEvent(new CustomEvent("open"));
@@ -131,14 +131,14 @@ export class SelectRoot extends HTMLElement {
      * @param {MouseEvent} event - The click event
      */
     #handleClick = (event) => {
-        if (this.hasAttribute("disabled")) return;
+        if (this.hasAttribute("x-disabled")) return;
 
         const trigger = /** @type {HTMLElement} */ (event.target).closest(
             "select-trigger"
         );
         if (trigger) {
             this.#isKeyboardOpen = false;
-            this.toggleAttribute("open");
+            this.toggleAttribute("x-open");
         }
     };
 
@@ -147,29 +147,29 @@ export class SelectRoot extends HTMLElement {
      * @param {KeyboardEvent} event - The keydown event
      */
     #handleKeydown = (event) => {
-        if (this.hasAttribute("disabled")) return;
+        if (this.hasAttribute("x-disabled")) return;
 
         if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             event.stopPropagation();
 
-            if (!this.hasAttribute("open")) {
+            if (!this.hasAttribute("x-open")) {
                 this.#isKeyboardOpen = true;
-                this.setAttribute("open", "");
+                this.setAttribute("x-open", "");
             }
-        } else if (event.key === "Tab" && this.hasAttribute("open")) {
+        } else if (event.key === "Tab" && this.hasAttribute("x-open")) {
             event.preventDefault();
             this.#navigateItems(event.shiftKey ? -1 : 1);
         } else if (
             (event.key === "ArrowDown" || event.key === "ArrowUp") &&
-            this.hasAttribute("open")
+            this.hasAttribute("x-open")
         ) {
             event.preventDefault();
             this.#navigateItems(event.key === "ArrowDown" ? 1 : -1);
         } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             event.preventDefault();
             this.#isKeyboardOpen = true;
-            this.setAttribute("open", "");
+            this.setAttribute("x-open", "");
         }
     };
 
@@ -180,12 +180,12 @@ export class SelectRoot extends HTMLElement {
     #handleSelect = (event) => {
         // console.log("Select event:", event);
         const item = /** @type {HTMLElement} */ (event.target);
-        const value = item.getAttribute("value");
+        const value = item.getAttribute("x-value");
 
-        if (value !== this.getAttribute("value")) {
-            this.setAttribute("value", value);
-            const eventName = this.getAttribute("event-name") || "change";
-            const name = this.getAttribute("name") || "select";
+        if (value !== this.getAttribute("x-value")) {
+            this.setAttribute("x-value", value);
+            const eventName = this.getAttribute("x-event-name") || "change";
+            const name = this.getAttribute("x-name") || "select";
             this.dispatchEvent(
                 new CustomEvent(`${eventName}`, {
                     bubbles: true,
@@ -195,7 +195,7 @@ export class SelectRoot extends HTMLElement {
         }
 
         // console.log("Closing select after selection");
-        this.removeAttribute("open");
+        this.removeAttribute("x-open");
     };
 
     /**
@@ -216,13 +216,13 @@ export class SelectRoot extends HTMLElement {
      * Updates the selected item and trigger text
      */
     #updateSelectedItem() {
-        const value = this.getAttribute("value");
+        const value = this.getAttribute("x-value");
         const items = this.querySelectorAll("select-item");
         const trigger = this.querySelector("select-trigger");
 
         items.forEach((item) => {
-            const isSelected = item.getAttribute("value") === value;
-            item.toggleAttribute("selected", isSelected);
+            const isSelected = item.getAttribute("x-value") === value;
+            item.toggleAttribute("x-selected", isSelected);
             if (isSelected) {
                 if (trigger) {
                     trigger.textContent = item.textContent;
@@ -233,7 +233,7 @@ export class SelectRoot extends HTMLElement {
 
     #getAvailableItems() {
         return Array.from(
-            this.querySelectorAll("select-item:not([disabled], [selected])")
+            this.querySelectorAll("select-item:not([x-disabled], [x-selected])")
         );
     }
 
@@ -264,7 +264,7 @@ export class SelectRoot extends HTMLElement {
      */
     #focusFirstItem() {
         const firstItem = this.querySelector(
-            "select-item:not([disabled],[selected])"
+            "select-item:not([x-disabled],[x-selected])"
         );
         if (firstItem) {
             /** @type {HTMLElement} */ (firstItem).focus();
@@ -278,9 +278,9 @@ export class SelectRoot extends HTMLElement {
         this.#clickOutsideHandler = (event) => {
             if (
                 !this.contains(/** @type {Node} */ (event.target)) &&
-                this.hasAttribute("open")
+                this.hasAttribute("x-open")
             ) {
-                this.removeAttribute("open");
+                this.removeAttribute("x-open");
             }
         };
         document.addEventListener("click", this.#clickOutsideHandler);

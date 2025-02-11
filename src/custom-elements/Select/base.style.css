@@ -37,22 +37,21 @@ select-root select-trigger {
 }
 
 select-root
-    :where(select-item, select-trigger):not([disabled]):where(
+    :where(select-item, select-trigger):not([x-disabled]):where(
         :hover,
-        :focus,
-
+        :focus
     ) {
     background-color: var(--select-focus-bg);
     outline: var(--select-focus-outline);
 }
 
 select-root
-    :where(select-item, select-trigger):not([disabled]):where([selected]) {
+    :where(select-item, select-trigger):not([x-disabled]):where([x-selected]) {
     background-color: var(--select-selected-bg);
     outline: var(--select-selected-outline);
 }
 
-select-root select-item[disabled] {
+select-root select-item[x-disabled] {
     opacity: var(--color-opacity-2);
     cursor: not-allowed;
 }

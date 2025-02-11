@@ -12,7 +12,7 @@ select-root select-content {
   display: none;
 }
 
-select-root[open] select-content {
+select-root[x-open] select-content {
   display: block;
 }
 

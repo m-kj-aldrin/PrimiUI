@@ -9,7 +9,7 @@ export class SelectItem extends HTMLElement {
      * @returns {string[]} Array of attribute names to observe
      */
     static get observedAttributes() {
-        return ["value", "selected", "disabled"];
+        return ["x-value", "x-selected", "x-disabled"];
     }
 
     /**
@@ -72,15 +72,15 @@ export class SelectItem extends HTMLElement {
      * @param {string | null} value - The new value of the attribute
      */
     #updateAriaStates(name, value) {
-        if (name === "selected") {
+        if (name === "x-selected") {
             this.setAttribute("aria-selected", String(value !== null));
-        } else if (name === "disabled") {
+        } else if (name === "x-disabled") {
             this.setAttribute("aria-disabled", String(value !== null));
         }
     }
 
     #checkActive() {
-        return !this.hasAttribute("selected") && !this.hasAttribute("disabled");
+        return !this.hasAttribute("x-selected") && !this.hasAttribute("x-disabled");
     }
 
     /**
@@ -115,7 +115,7 @@ export class SelectItem extends HTMLElement {
                 bubbles: true,
                 composed: true,
                 detail: {
-                    value: this.getAttribute("value"),
+                    value: this.getAttribute("x-value"),
                 },
             })
         );

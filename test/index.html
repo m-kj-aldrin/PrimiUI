@@ -2,7 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
         <title>test</title>
 
         <!-- custom element base theme -->
@@ -25,22 +27,24 @@
         <!-- user styles -->
         <link rel="stylesheet" href="style.css" />
 
+        <!-- user script -->
         <script type="module" src="index.js"></script>
     </head>
     <body>
-        <input-root name="user-age">
+        <input-root x-name="user-age">
             <input-label>Age</input-label>
             <input-value>30</input-value>
         </input-root>
-        <select-root name="favorite-food">
+
+        <select-root x-name="favorite-food">
             <select-trigger>Choose your favorite</select-trigger>
             <select-content>
-                <select-item value="pizza">🍕 Pizza Margherita</select-item>
-                <select-item value="sushi">🍣 Fresh Sushi Roll</select-item>
-                <select-item value="taco">🌮 Street Tacos</select-item>
-                <select-item value="coffee">☕️ Hot Coffee</select-item>
-                <select-item value="rocket">🚀 Space Travel</select-item>
-                <select-item value="unicorn" disabled>
+                <select-item x-value="pizza">🍕 Pizza Margherita</select-item>
+                <select-item x-value="sushi">🍣 Fresh Sushi Roll</select-item>
+                <select-item x-value="taco">🌮 Street Tacos</select-item>
+                <select-item x-value="coffee">☕️ Hot Coffee</select-item>
+                <select-item x-value="rocket">🚀 Space Travel</select-item>
+                <select-item x-value="unicorn" x-disabled>
                     🦄 Magic Unicorn
                 </select-item>
             </select-content>

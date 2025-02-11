@@ -1,0 +1,21 @@
+select-root {
+  position: relative;
+}
+
+select-root,
+select-trigger {
+  display: inline-block;
+}
+
+select-root select-content {
+  position: absolute;
+  display: none;
+}
+
+select-root[open] select-content {
+  display: block;
+}
+
+select-item {
+  display: block;
+}

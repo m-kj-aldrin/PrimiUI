@@ -1,0 +1,556 @@
+---
+description: Use these instructions to generate VS Code custom data files for a custom element. The instructions include full JSON schemas for HTML and CSS data files, detailing the structure for tags, attributes, CSS properties, at-directives, pseudo classes, and pseudo elements
+globs: 
+---
+**Instruction Prompt for Generating VS Code Custom Data Files for a Custom Element**
+
+Your task is to generate two JSON files that enable VS Code to offer autocomplete and hover support when working with a custom element. The custom element follows the provided *Custom Element Development Guidelines* (e.g., using the Light DOM, event delegation, and a clear separation between functionality and aesthetics). One JSON file should cover HTML support (tags, attributes, and attribute values) while the other should cover CSS support (custom properties, at-directives, pseudo classes, and pseudo elements).
+
+Additionally, after generating the custom data files, update the `.vscode/settings.json` file so that VS Code knows where to find these files. The custom data files must be stored in the folder `.vscode/custom-data`, and their paths should be relative to the project, formatted as follows:
+- HTML custom data file: `./.vscode/custom-data/<name-of-custom-element>.html-data.json`
+- CSS custom data file: `./.vscode/custom-data/<name-of-custom-element>.css-data.json`
+
+Below are the complete schemas for both files, followed by detailed instructions for updating the settings file.
+
+---
+
+### 1. VS Code HTML Custom Data File
+
+- **File Purpose:**  
+  Provide autocomplete and hover support for the custom element’s tag and its accepted attributes.
+
+- **Requirements:**
+  - Create a JSON file that conforms to the following HTML custom data schema.
+  - Under the `"tags"` array, include an object for your custom element. Set:
+    - `"name"`: the custom element’s tag name (for example, `"my-custom-element"`).
+    - Optionally include a `"description"` that explains the element’s purpose.
+    - Under the `"attributes"` array, list every attribute your custom element accepts. For each attribute:
+      - Provide its `"name"`.
+      - Include a `"description"` that explains the attribute’s usage.
+      - Optionally, specify possible `"values"` or a `"valueSet"` if applicable.
+  - Optionally include `"globalAttributes"` or `"valueSets"` if your element or its children use shared attribute configurations.
+
+- **Complete HTML Custom Data Schema:**
+  ```json
+  {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "vscode-html-customdata",
+    "version": 1.1,
+    "title": "VS Code HTML Custom Data format",
+    "description": "Format for loading Custom Data in VS Code's HTML support",
+    "type": "object",
+    "required": ["version"],
+    "definitions": {
+      "references": {
+        "type": "object",
+        "required": ["name", "url"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the reference."
+          },
+          "url": {
+            "type": "string",
+            "description": "The URL of the reference.",
+            "pattern": "https?:\\/\\/",
+            "patternErrorMessage": "URL should start with http:// or https://"
+          }
+        }
+      },
+      "markupDescription": {
+        "type": "object",
+        "required": ["kind", "value"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "Whether `description.value` should be rendered as plaintext or markdown",
+            "enum": [
+              "plaintext",
+              "markdown"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "description": "Description shown in completion and hover"
+          }
+        }
+      }
+    },
+    "properties": {
+      "version": {
+        "const": 1.1,
+        "description": "The custom data version",
+        "type": "number"
+      },
+      "tags": {
+        "description": "Custom HTML tags",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "defaultSnippets": [
+            {
+              "body": {
+                "name": "$1",
+                "description": "",
+                "attributes": []
+              }
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of tag"
+            },
+            "description": {
+              "description": "Description of tag shown in completion and hover",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                { "$ref": "#/definitions/markupDescription" }
+              ]
+            },
+            "attributes": {
+              "type": "array",
+              "description": "A list of possible attributes for the tag",
+              "items": {
+                "type": "object",
+                "required": ["name"],
+                "defaultSnippets": [
+                  {
+                    "body": {
+                      "name": "$1",
+                      "description": "",
+                      "values": []
+                    }
+                  }
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of attribute"
+                  },
+                  "description": {
+                    "description": "Description of attribute shown in completion and hover",
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      { "$ref": "#/definitions/markupDescription" }
+                    ]
+                  },
+                  "valueSet": {
+                    "type": "string",
+                    "description": "Name of the matching attribute value set"
+                  },
+                  "values": {
+                    "type": "array",
+                    "description": "A list of possible values for the attribute",
+                    "items": {
+                      "type": "object",
+                      "required": ["name"],
+                      "defaultSnippets": [
+                        {
+                          "body": {
+                            "name": "$1",
+                            "description": ""
+                          }
+                        }
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Name of attribute value"
+                        },
+                        "description": {
+                          "description": "Description of attribute value shown in completion and hover",
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            { "$ref": "#/definitions/markupDescription" }
+                          ]
+                        },
+                        "references": {
+                          "type": "array",
+                          "description": "A list of references for the attribute value shown in completion and hover",
+                          "items": {
+                            "$ref": "#/definitions/references"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "references": {
+                    "type": "array",
+                    "description": "A list of references for the attribute shown in completion and hover",
+                    "items": {
+                      "$ref": "#/definitions/references"
+                    }
+                  }
+                }
+              }
+            },
+            "references": {
+              "type": "array",
+              "description": "A list of references for the tag shown in completion and hover",
+              "items": {
+                "$ref": "#/definitions/references"
+              }
+            }
+          }
+        }
+      },
+      "globalAttributes": {
+        "description": "Custom HTML global attributes",
+        "type": "array",
+        "items": {
+          "$ref": "#/properties/tags/items/properties/attributes/items"
+        }
+      },
+      "valueSets": {
+        "description": "A set of attribute value. When an attribute refers to an attribute set, its value completion will use value from that set",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "defaultSnippets": [
+            {
+              "body": {
+                "name": "$1",
+                "description": "",
+                "values": []
+              }
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of attribute value in value set"
+            },
+            "values": {
+              "$ref": "#/properties/tags/items/properties/attributes/items/properties/values"
+            }
+          }
+        }
+      }
+    }
+  }
+  ```
+
+---
+
+### 2. VS Code CSS Custom Data File
+
+- **File Purpose:**  
+  Provide autocomplete and hover support for custom CSS properties, at-directives, pseudo classes, and pseudo elements that your custom element uses.
+
+- **Requirements:**
+  - Create a JSON file that conforms to the following CSS custom data schema.
+  - Under the `"properties"` array, list each custom CSS property used by your element. For each property:
+    - Provide its `"name"` (for example, `"--my-custom-color"`).
+    - Include a `"description"` explaining what the property does.
+    - Optionally, add additional metadata such as `"status"`, `"browsers"`, or `"references"` if applicable.
+  - Similarly, if your custom element employs CSS at-directives, pseudo classes, or pseudo elements, add them to the `"atDirectives"`, `"pseudoClasses"`, or `"pseudoElements"` arrays respectively, using the schema.
+
+- **Complete CSS Custom Data Schema:**
+  ```json
+  {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "vscode-css-customdata",
+    "version": 1.1,
+    "title": "VS Code CSS Custom Data format",
+    "description": "Format for loading Custom Data in VS Code's CSS support",
+    "type": "object",
+    "required": ["version"],
+    "definitions": {
+      "references": {
+        "type": "object",
+        "required": ["name", "url"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the reference."
+          },
+          "url": {
+            "type": "string",
+            "description": "The URL of the reference.",
+            "pattern": "https?:\\/\\/",
+            "patternErrorMessage": "URL should start with http:// or https://"
+          }
+        }
+      },
+      "markupDescription": {
+        "type": "object",
+        "required": ["kind", "value"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "Whether `description.value` should be rendered as plaintext or markdown",
+            "enum": ["plaintext", "markdown"]
+          },
+          "value": {
+            "type": "string",
+            "description": "Description shown in completion and hover"
+          }
+        }
+      }
+    },
+    "properties": {
+      "version": {
+        "const": 1.1,
+        "description": "The custom data version",
+        "type": "number"
+      },
+      "properties": {
+        "description": "Custom CSS properties",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "defaultSnippets": [
+            {
+              "body": {
+                "name": "$1",
+                "description": ""
+              }
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of property"
+            },
+            "description": {
+              "description": "Description of property shown in completion and hover",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                { "$ref": "#/definitions/markupDescription" }
+              ]
+            },
+            "status": {
+              "type": "string",
+              "description": "Browser status",
+              "enum": ["standard", "experimental", "nonstandard", "obsolete"]
+            },
+            "browsers": {
+              "type": "array",
+              "description": "Supported browsers",
+              "items": {
+                "type": "string",
+                "pattern": "(E|FF|S|C|IE|O)([\\d|\\.]+)?",
+                "patternErrorMessage": "Browser item must follow the format of `${browser}${version}`. `browser` is one of:\n- E: Edge\n- FF: Firefox\n- S: Safari\n- C: Chrome\n- IE: Internet Explorer\n- O: Opera"
+              }
+            },
+            "references": {
+              "type": "array",
+              "description": "A list of references for the property shown in completion and hover",
+              "items": {
+                "$ref": "#/definitions/references"
+              }
+            },
+            "relevance": {
+              "type": "number",
+              "description": "A number in the range [0, 100] used for sorting. Bigger number means more relevant and will be sorted first. Entries that do not specify a relevance will get 50 as default value.",
+              "minimum": 0,
+              "exclusiveMaximum": 100
+            }
+          }
+        }
+      },
+      "atDirectives": {
+        "description": "Custom CSS at directives",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "defaultSnippets": [
+            {
+              "body": {
+                "name": "@$1",
+                "description": ""
+              }
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of at directive",
+              "pattern": "^@.+",
+              "patternErrorMessage": "Pseudo class must start with `@`"
+            },
+            "description": {
+              "description": "Description of at directive shown in completion and hover",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                { "$ref": "#/definitions/markupDescription" }
+              ]
+            },
+            "status": {
+              "$ref": "#/properties/properties/items/properties/status"
+            },
+            "browsers": {
+              "$ref": "#/properties/properties/items/properties/browsers"
+            },
+            "references": {
+              "type": "array",
+              "description": "A list of references for the at-directive shown in completion and hover",
+              "items": {
+                "$ref": "#/definitions/references"
+              }
+            }
+          }
+        }
+      },
+      "pseudoClasses": {
+        "description": "Custom CSS pseudo classes",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "defaultSnippets": [
+            {
+              "body": {
+                "name": ":$1",
+                "description": ""
+              }
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of pseudo class",
+              "pattern": "^:.+",
+              "patternErrorMessage": "Pseudo class must start with `:`"
+            },
+            "description": {
+              "description": "Description of pseudo class shown in completion and hover",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                { "$ref": "#/definitions/markupDescription" }
+              ]
+            },
+            "status": {
+              "$ref": "#/properties/properties/items/properties/status"
+            },
+            "browsers": {
+              "$ref": "#/properties/properties/items/properties/browsers"
+            },
+            "references": {
+              "type": "array",
+              "description": "A list of references for the pseudo-class shown in completion and hover",
+              "items": {
+                "$ref": "#/definitions/references"
+              }
+            }
+          }
+        }
+      },
+      "pseudoElements": {
+        "description": "Custom CSS pseudo elements",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "defaultSnippets": [
+            {
+              "body": {
+                "name": "::$1",
+                "description": ""
+              }
+            }
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of pseudo element",
+              "pattern": "^::.+",
+              "patternErrorMessage": "Pseudo class must start with `::`"
+            },
+            "description": {
+              "description": "Description of pseudo element shown in completion and hover",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                { "$ref": "#/definitions/markupDescription" }
+              ]
+            },
+            "status": {
+              "$ref": "#/properties/properties/items/properties/status"
+            },
+            "browsers": {
+              "$ref": "#/properties/properties/items/properties/browsers"
+            },
+            "references": {
+              "type": "array",
+              "description": "A list of references for the pseudo-element shown in completion and hover",
+              "items": {
+                "$ref": "#/definitions/references"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ```
+
+---
+
+### 3. Updating the .vscode/settings.json File
+
+After creating the HTML and CSS custom data files, update the `.vscode/settings.json` file to reference these files. The settings file should include paths to the custom data files in the `"html.customData"` and `"css.customData"` arrays. Since the custom data files are stored in the `.vscode/custom-data` folder, use paths relative to the project. For example, if your custom element is named `my-custom-element`, the paths should be:
+
+- HTML custom data file: `./.vscode/custom-data/my-custom-element.html-data.json`
+- CSS custom data file: `./.vscode/custom-data/my-custom-element.css-data.json`
+
+**Example .vscode/settings.json File:**
+```json
+{
+  "html.customData": [
+    "./.vscode/custom-data/my-custom-element.html-data.json"
+  ],
+  "css.customData": [
+    "./.vscode/custom-data/my-custom-element.css-data.json"
+  ]
+}
+```
+
+---
+
+### General Instructions for the LLM Coding Assistant
+
+1. **Input Consideration:**  
+   Your custom element follows the provided *Custom Element Development Guidelines* (using the Light DOM, event delegation, and modular file organization). Ensure that the custom data you create reflects these principles (for example, correct tag naming and attribute conventions).
+
+2. **Output Requirements:**  
+   - **HTML Custom Data File:**  
+     - Generate a JSON file that complies with the HTML custom data schema above.
+     - Include an entry under `"tags"` for your custom element (e.g., `"my-custom-element"`) with its corresponding attributes and any shared/global attributes if needed.
+   - **CSS Custom Data File:**  
+     - Generate a JSON file that complies with the CSS custom data schema above.
+     - Include entries for all custom CSS properties, at-directives, pseudo classes, and pseudo elements that your custom element uses.
+   - **Update .vscode/settings.json:**  
+     - Modify the `.vscode/settings.json` file to add the paths to the custom data files.  
+     - Ensure the paths are relative to the project and follow the format:  
+       - `./.vscode/custom-data/<name-of-custom-element>.html-data.json` for HTML data.  
+       - `./.vscode/custom-data/<name-of-custom-element>.css-data.json` for CSS data.
+
+3. **Output Format:**  
+   Provide the output as three separate JSON code blocks:
+   - One JSON code block for the HTML custom data file.
+   - One JSON code block for the CSS custom data file.
+   - One JSON code block showing the updated contents of the `.vscode/settings.json` file.
+
+4. **Validation:**  
+   Ensure that both custom data files strictly follow their respective schemas (including required fields like `"version"`) so that VS Code can utilize them for autocomplete and hover functionality.
+
+By following these instructions and using the provided complete schemas, you will generate two valid JSON files and update the VS Code settings to enrich the development experience for users of your custom element.

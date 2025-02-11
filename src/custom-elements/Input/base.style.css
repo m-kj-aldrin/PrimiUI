@@ -1,0 +1,23 @@
+input-root {
+    --input-focus-bg: var(--color-background, 0 0% 0%) /
+        var(--color-opacity-1, 0.1);
+    --input-focus-border-color: var(--color-foreground, 0 0% 0%) / 1;
+
+    --input-border-color: var(--color-foreground, 0 0% 0%) /
+        var(--color-opacity-2, 0.3);
+    --input-border-radius: var(--border-radius, 2px);
+    --input-padding: 0.5rem;
+}
+
+input-value {
+    padding: var(--input-padding);
+    border: var(--border-width, 1px) solid
+        hsl(var(--input-border-color, 0 0% 0%));
+    border-radius: var(--input-border-radius);
+}
+
+input-value:focus {
+    background-color: hsl(var(--input-focus-bg, 0 0% 100%));
+    border-color: hsl(var(--input-focus-border-color, 0 0% 0%));
+    outline: none;
+}

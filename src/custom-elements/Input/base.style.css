@@ -1,12 +1,13 @@
 input-root {
-    --input-focus-bg: var(--color-background, 0 0% 0%) /
-        var(--color-opacity-1, 0.1);
-    --input-focus-border-color: var(--color-foreground, 0 0% 0%) / 1;
+    --input-focus-bg: var(--color-foreground, 0 0% 0%) /
+        var(--color-opacity-2, 0.3);
+    --input-focus-border-color: var(--color-foreground, 0 0% 0%) /
+        var(--color-opacity-3, 0.5);
 
     --input-border-color: var(--color-foreground, 0 0% 0%) /
         var(--color-opacity-2, 0.3);
     --input-border-radius: var(--border-radius, 2px);
-    --input-padding: 0.5rem;
+    --input-padding: 4px 4px;
 }
 
 input-value {
@@ -14,6 +15,7 @@ input-value {
     border: var(--border-width, 1px) solid
         hsl(var(--input-border-color, 0 0% 0%));
     border-radius: var(--input-border-radius);
+    background-color: hsl(var(--color-background, 0 0% 100%));
 }
 
 input-value:focus {

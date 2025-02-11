@@ -22,7 +22,7 @@ To promote a clear separation of concerns between functionality and aesthetics, 
 
 -   **Aesthetic Styling:**
     -   **File Name:** `[custom-element-name].style.css`
-    -   **Purpose:** Contains the visual styling rules (colors, fonts, decorative elements) that can be easily customized. This file uses CSS custom properties and references values from an external `base.style.css` [base.theme.css](mdc:src/custom-elements/base.theme.css) (which is not part of the custom element) so that visual themes can be adjusted independently of the element’s core functionality.
+    -   **Purpose:** Contains the visual styling rules (colors, fonts, decorative elements) that can be easily customized. This file uses CSS custom properties and references values from an external `base.theme.css` [base.theme.css](mdc:src/custom-elements/base.theme.css) (which is not part of the custom element) so that visual themes can be adjusted independently of the element’s core functionality.
 
 This split ensures that:
 

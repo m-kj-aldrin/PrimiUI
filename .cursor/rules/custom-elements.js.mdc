@@ -68,7 +68,11 @@ These guidelines are intended to complement the general JavaScript rules. They f
 
 ## 5. File Structure & Asset Organization
 
-Organize each custom element into three separate files to enforce a clear separation between functionality and aesthetics:
+Organize each custom element to enforce a clear separation between functionality and aesthetics.
+
+### 5.1. Standard Custom Element Files
+
+For standalone custom elements, use three separate files:
 
 -   **JavaScript Implementation:**
 
@@ -82,4 +86,25 @@ Organize each custom element into three separate files to enforce a clear separa
 
 -   **Aesthetic Styling:**
     -   **File Name:** `[custom-element-name].style.css`
-    -   **Purpose:** Contains visual styling rules that use custom properties and reference an external `base-style.css`. This separation allows users to adjust the look and feel without affecting the functional styles.
+    -   **Purpose:** Contains visual styling rules that use custom properties and reference an external `base.theme.css` [base.theme.css](mdc:src/custom-elements/base.theme.css). This separation allows users to adjust the look and feel without affecting the functional styles.
+
+### 5.2. Hierarchical Custom Elements Organization
+
+When developing custom elements that include a primary element along with related child elements, follow this structure:
+
+-   **Folder Structure:**  
+    Always place the custom element inside a dedicated folder named after the custom element's base name (e.g., `Widget/` for a "widget" element).
+
+-   **File Naming & Organization:**
+    -   The **main** custom element should be defined in a file called `root.js` within the folder, and its definition should use the naming convention `[custom-element-name]-root`.
+    -   Any related **child** custom elements should be defined in their own files within the same folder. Each file should be named according to the child's role (e.g., `trigger.js`, `item.js`, etc.), with the custom element itself named `[custom-element-name]-[role]`.
+
+**Generic Example:**  
+For a custom element named "widget" that comprises a main element (`widget-root`) and child elements (`widget-header`, `widget-body`), the file structure should be as follows:
+
+```
+Widget/
+├── root.js       // Contains the definition for widget-root
+├── header.js     // Contains the definition for widget-header
+└── body.js       // Contains the definition for widget-body
+```

@@ -1,12 +1,7 @@
 ---
-description: 
-globs: 
----
----
 description: General rules for writing javascript
 globs: **/*.js
 ---
-
 ## 1. ECMAScript 2022 and ES Modules
 
 -   **Modern Language Features:**

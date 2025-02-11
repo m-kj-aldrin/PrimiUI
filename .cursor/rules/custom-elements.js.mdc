@@ -1,12 +1,7 @@
 ---
-description: 
-globs: 
----
----
 description: Specific rules for writing javascript custom-elements
 globs: **/custom-elements/**/*.js
 ---
-
 # Custom Element Development Guidelines
 
 These guidelines are intended to complement the general JavaScript rules. They focus on best practices for building robust, maintainable custom elements that work with the Light DOM, leverage event delegation, and maintain a clear separation between functionality and aesthetics.

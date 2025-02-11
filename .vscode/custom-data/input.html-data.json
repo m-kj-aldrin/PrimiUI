@@ -1,0 +1,52 @@
+{
+  "version": 1.1,
+  "tags": [
+    {
+      "name": "input-root",
+      "description": "A custom input element that provides enhanced input functionality. Consists of a root element that contains a label and value.",
+      "attributes": [
+        {
+          "name": "x-name",
+          "description": "The name of the input, used in form submissions and change events."
+        }
+      ]
+    },
+    {
+      "name": "input-value",
+      "description": "The editable value container for the input element. Supports single-line text input.",
+      "attributes": [
+        {
+          "name": "contenteditable",
+          "description": "Always set to 'true' to enable text editing.",
+          "values": [
+            {
+              "name": "true"
+            }
+          ]
+        },
+        {
+          "name": "role",
+          "description": "ARIA role, always set to 'textbox' for accessibility.",
+          "values": [
+            {
+              "name": "textbox"
+            }
+          ]
+        },
+        {
+          "name": "aria-multiline",
+          "description": "ARIA attribute indicating this is a single-line input.",
+          "values": [
+            {
+              "name": "false"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "input-label",
+      "description": "The label element for the input. Clicking it focuses the input value element."
+    }
+  ]
+} 

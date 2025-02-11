@@ -1,0 +1,43 @@
+{
+  "version": 1.1,
+  "properties": [
+    {
+      "name": "--select-padding",
+      "description": "Padding applied to select items and trigger. Default: 4px 4px"
+    },
+    {
+      "name": "--select-gap",
+      "description": "Gap between the trigger and content (dropdown). Default: 4px"
+    },
+    {
+      "name": "--select-focus-bg",
+      "description": "Background color for focused/hovered items. Default: hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-2, 0.2))"
+    },
+    {
+      "name": "--select-focus-outline",
+      "description": "Outline for focused/hovered items. Default: var(--border-width, 1px) solid hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-3, 0.3))"
+    },
+    {
+      "name": "--select-selected-bg",
+      "description": "Background color for selected items. Default: hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-3, 0.3))"
+    },
+    {
+      "name": "--select-selected-outline",
+      "description": "Outline for selected items. Default: var(--border-width, 1px) solid hsl(var(--color-foreground, 0 0% 0%) / var(--color-opacity-4, 0.4))"
+    }
+  ],
+  "pseudoClasses": [
+    {
+      "name": ":hover",
+      "description": "Styles applied when hovering over select items or trigger"
+    },
+    {
+      "name": ":focus",
+      "description": "Styles applied when select items or trigger have keyboard focus"
+    },
+    {
+      "name": ":disabled",
+      "description": "Styles applied to disabled select items"
+    }
+  ]
+} 

@@ -1,0 +1,31 @@
+{
+  "version": 1.1,
+  "properties": [
+    {
+      "name": "--input-focus-bg",
+      "description": "Background color for the input when focused. Default: var(--color-foreground, 0 0% 0%) / var(--color-opacity-2, 0.3)"
+    },
+    {
+      "name": "--input-focus-border-color",
+      "description": "Border color for the input when focused. Default: var(--color-foreground, 0 0% 0%) / var(--color-opacity-3, 0.5)"
+    },
+    {
+      "name": "--input-border-color",
+      "description": "Border color for the input in its normal state. Default: var(--color-foreground, 0 0% 0%) / var(--color-opacity-2, 0.3)"
+    },
+    {
+      "name": "--input-border-radius",
+      "description": "Border radius of the input. Default: var(--border-radius, 2px)"
+    },
+    {
+      "name": "--input-padding",
+      "description": "Padding inside the input value element. Default: 4px 4px"
+    }
+  ],
+  "pseudoClasses": [
+    {
+      "name": ":focus",
+      "description": "Styles applied when the input value element has keyboard focus"
+    }
+  ]
+} 

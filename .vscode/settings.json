@@ -1,0 +1,10 @@
+{
+    "html.customData": [
+        "./.vscode/custom-data/select.html-data.json",
+        "./.vscode/custom-data/input.html-data.json"
+    ],
+    "css.customData": [
+        "./.vscode/custom-data/select.css-data.json",
+        "./.vscode/custom-data/input.css-data.json"
+    ]
+}

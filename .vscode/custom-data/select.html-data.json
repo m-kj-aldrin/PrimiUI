@@ -1,0 +1,59 @@
+{
+  "version": 1.1,
+  "tags": [
+    {
+      "name": "select-root",
+      "description": "A custom select element that provides a dropdown list of options. It follows the native select element behavior with enhanced styling and keyboard navigation support.",
+      "attributes": [
+        {
+          "name": "x-value",
+          "description": "The currently selected value. Maps to the x-value attribute of the selected item."
+        },
+        {
+          "name": "x-disabled",
+          "description": "When present, indicates that the select is not interactive."
+        },
+        {
+          "name": "x-open",
+          "description": "When present, indicates that the select dropdown is open."
+        },
+        {
+          "name": "x-event-name",
+          "description": "Optional. The name of the event to dispatch when selection changes. Defaults to 'change'."
+        },
+        {
+          "name": "x-name",
+          "description": "Optional. The name to include in the change event detail. Defaults to 'select'."
+        }
+      ]
+    },
+    {
+      "name": "select-trigger",
+      "description": "The button that triggers the select dropdown. Shows the currently selected value.",
+      "attributes": [
+        {
+          "name": "tabindex",
+          "description": "The tab order of the trigger button. Defaults to 0."
+        }
+      ]
+    },
+    {
+      "name": "select-item",
+      "description": "An option in the select dropdown list.",
+      "attributes": [
+        {
+          "name": "x-value",
+          "description": "The value associated with this item. This value will be set on the select-root when the item is selected."
+        },
+        {
+          "name": "x-selected",
+          "description": "When present, indicates that this item is currently selected."
+        },
+        {
+          "name": "x-disabled",
+          "description": "When present, indicates that this item cannot be selected."
+        }
+      ]
+    }
+  ]
+} 

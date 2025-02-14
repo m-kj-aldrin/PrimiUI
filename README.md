@@ -13,10 +13,10 @@ The custom elements developed in this project are designed to implement basic UX
     <script type="module" src="../src/custom-elements/Select/index.js"></script>
 
     <!-- custom element functional/ux styling -->
-    <link rel="stylesheet" href="../src/custom-elements/Input/base.ux.css" />
+    <link rel="stylesheet" href="../src/custom-elements/Select/base.ux.css" />
 
     <!-- optional asethic styling using base.theme.css -->
-    <link rel="stylesheet" href="../src/custom-elements/Input/base.style.css" />
+    <link rel="stylesheet" href="../src/custom-elements/Select/base.style.css" />
 </head>
 
 <select-root x-name="favorite-food" x-open>

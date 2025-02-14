@@ -113,14 +113,15 @@ export class SelectRoot extends HTMLElement {
         } else if (name === "x-open") {
             this.setAttribute("aria-expanded", String(newValue !== null));
             if (newValue !== null) {
-                this.dispatchEvent(new CustomEvent("open"));
-                if (this.#isKeyboardOpen) {
-                    this.#focusFirstItem();
-                }
+                // this.dispatchEvent(new CustomEvent("open"));
+                // if (this.#isKeyboardOpen) {
+                //     this.#focusFirstItem();
+                // }
                 this.#isKeyboardOpen = false;
             } else {
-                this.dispatchEvent(new CustomEvent("close"));
+                // this.dispatchEvent(new CustomEvent("close"));
                 this.querySelector("select-trigger")?.focus();
+                this.#focusedItem = null;
             }
         }
     }
@@ -163,12 +164,15 @@ export class SelectRoot extends HTMLElement {
             (event.key === "ArrowDown" || event.key === "ArrowUp") &&
             this.hasAttribute("x-open")
         ) {
+            console.log("arrow");
+
             event.preventDefault();
             this.#navigateItems(event.key === "ArrowDown" ? 1 : -1);
         } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             event.preventDefault();
             this.#isKeyboardOpen = true;
             this.setAttribute("x-open", "");
+            this.#navigateItems(event.key === "ArrowDown" ? 1 : -1);
         }
     };
 
@@ -202,13 +206,11 @@ export class SelectRoot extends HTMLElement {
      * @param {FocusEvent} event - The focus event
      */
     #handleFocusIn = (event) => {
-        const item = /** @type {HTMLElement} */ (event.target).closest(
-            "select-item"
+        const target = /** @type {HTMLElement} */ (event.target);
+        const item = /** @type {import("./item.js").SelectItem} */ (
+            target.closest("select-item")
         );
-        if (item) {
-            // console.log("Focus on item:", item);
-            this.#focusedItem = /** @type {HTMLElement} */ (item);
-        }
+        if (item) this.#focusedItem = item;
     };
 
     /**

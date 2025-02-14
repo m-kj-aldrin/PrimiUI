@@ -19,7 +19,7 @@ class InputLabel extends HTMLElement {
      */
     #handleClick() {
         const root = this.closest("input-root");
-        const valueElement = /** @type {import("./value").InputValue} */ (
+        const valueElement = /** @type {import("./TextValue/index").InputValue} */ (
             root?.querySelector("input-value")
         );
         valueElement?.focus();

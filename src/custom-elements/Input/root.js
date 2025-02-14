@@ -13,7 +13,7 @@ class InputRoot extends HTMLElement {
     #previouseChangeValue = "";
 
     get value() {
-        const valueElement = /** @type {import("./value").InputValue} */ (
+        const valueElement = /** @type {import("./TextValue/index").InputValue} */ (
             this.querySelector("input-value")
         );
 

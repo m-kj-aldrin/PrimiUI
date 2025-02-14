@@ -5,7 +5,7 @@ declare global {
         "select-item": import("./custom-elements/Select/item.js").SelectItem;
         "input-root": import("./custom-elements/Input/root.js").InputRoot;
         "input-label": import("./custom-elements/Input/label.js").InputLabel;
-        "input-value": import("./custom-elements/Input/value.js").InputValue;
+        "input-value": import("./custom-elements/Input/TextValue/index.js").InputValue;
     }
     interface HTMLElement {
         /**

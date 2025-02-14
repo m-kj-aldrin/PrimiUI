@@ -1,4 +1,1 @@
-input-value {
-    white-space: nowrap;
-    overflow: hidden;
-}
+@import "TextValue/base.ux.css";

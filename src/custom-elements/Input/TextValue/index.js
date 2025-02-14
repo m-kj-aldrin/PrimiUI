@@ -1,7 +1,7 @@
 /**
  * Value container element for the input
  */
-class InputValue extends HTMLElement {
+class InputTextValue extends HTMLElement {
     constructor() {
         super();
     }
@@ -56,6 +56,6 @@ class InputValue extends HTMLElement {
 }
 
 // Register the custom element
-customElements.define("input-value", InputValue);
+customElements.define("input-text-value", InputTextValue);
 
-export { InputValue }; 
+export { InputTextValue }; 

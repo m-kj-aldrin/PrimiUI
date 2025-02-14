@@ -18,12 +18,8 @@
           "description": "When present, indicates that the select dropdown is open."
         },
         {
-          "name": "x-event-name",
-          "description": "Optional. The name of the event to dispatch when selection changes. Defaults to 'change'."
-        },
-        {
           "name": "x-name",
-          "description": "Optional. The name to include in the change event detail. Defaults to 'select'."
+          "description": "Optional. The name to include in the select event"
         }
       ]
     },

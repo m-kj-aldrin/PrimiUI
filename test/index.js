@@ -1,11 +1,10 @@
-document.addEventListener("change", (event) => {
-    console.log(`change event`, event.target);
+document.addEventListener("x-select", (event) => {
+    const value = event.value;
+    const name = event.name;
+    console.log(`x-select event`, { value, name });
 
-    if (event?.detail) {
-        const detail = event.detail;
-        const favoriteThing = document.getElementById("favorite-thing");
-        favoriteThing.textContent = detail.value;
-    }
+    const favoriteThing = document.getElementById("favorite-thing");
+    favoriteThing.textContent = value;
 });
 
 document.addEventListener("input", (event) => {

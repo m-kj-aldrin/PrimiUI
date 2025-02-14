@@ -1,93 +1,59 @@
+export class XSelectEvent extends Event {
+    /**@type {SelectItem} */
+    target;
+
+    /** @type {string | null} */
+    name;
+
+    /**
+     * @param {string} value - The value of the selected item
+     */
+    constructor(value) {
+        super("x-select", { bubbles: true, composed: true });
+        this.value = value;
+    }
+}
+
 /**
  * A custom select item element that represents an option in a select dropdown.
  * @extends HTMLElement
- * @fires SelectItem#select - Fired when the item is selected with value detail
+ * @fires XSelectEvent - Fired when the item is selected with value detail
  */
 export class SelectItem extends HTMLElement {
-    /**
-     * The attributes to observe for changes
-     * @returns {string[]} Array of attribute names to observe
-     */
     static get observedAttributes() {
         return ["x-value", "x-selected", "x-disabled"];
     }
 
-    /**
-     * Called when the element is added to the document
-     * Sets up accessibility attributes and event listeners
-     * @returns {void}
-     */
     connectedCallback() {
-        this.#setupAccessibility();
+        this.#setupAttributes();
         this.#setupEventListeners();
     }
 
-    /**
-     * Called when the element is removed from the document
-     * Cleans up event listeners
-     * @returns {void}
-     */
     disconnectedCallback() {
         this.#removeEventListeners();
     }
 
-    /**
-     * Handles attribute changes and updates ARIA states
-     * @param {string} name - The name of the attribute that changed
-     * @param {string | null} oldValue - The old value of the attribute
-     * @param {string | null} newValue - The new value of the attribute
-     * @returns {void}
-     */
-    attributeChangedCallback(name, oldValue, newValue) {
-        this.#updateAriaStates(name, newValue);
-    }
-
-    /**
-     * Sets up initial accessibility attributes
-     */
-    #setupAccessibility() {
+    #setupAttributes() {
         this.setAttribute("role", "option");
         this.setAttribute("tabindex", "0");
     }
 
-    /**
-     * Sets up event listeners
-     */
     #setupEventListeners() {
         this.addEventListener("click", this.#handleClick);
         this.addEventListener("keydown", this.#handleKeydown);
     }
 
-    /**
-     * Removes event listeners
-     */
     #removeEventListeners() {
         this.removeEventListener("click", this.#handleClick);
         this.removeEventListener("keydown", this.#handleKeydown);
     }
 
-    /**
-     * Updates ARIA states based on attribute changes
-     * @param {string} name - The name of the attribute that changed
-     * @param {string | null} value - The new value of the attribute
-     */
-    #updateAriaStates(name, value) {
-        if (name === "x-selected") {
-            this.setAttribute("aria-selected", String(value !== null));
-        } else if (name === "x-disabled") {
-            this.setAttribute("aria-disabled", String(value !== null));
-        }
-    }
-
     #checkActive() {
-        return !this.hasAttribute("x-selected") && !this.hasAttribute("x-disabled");
+        const isSelected = this.hasAttribute("x-selected");
+        const isDisabled = this.hasAttribute("x-disabled");
+        return !isSelected && !isDisabled;
     }
-
-    /**
-     * Handles click events and dispatches select event if not disabled
-     * @param {MouseEvent} event - The click event
-     */
-    #handleClick(event) {
+    #handleClick() {
         if (!this.#checkActive()) return;
         this.#dispatchSelectEvent();
     }
@@ -110,15 +76,8 @@ export class SelectItem extends HTMLElement {
      * Dispatches the select event with the current value
      */
     #dispatchSelectEvent() {
-        this.dispatchEvent(
-            new CustomEvent("select", {
-                bubbles: true,
-                composed: true,
-                detail: {
-                    value: this.getAttribute("x-value"),
-                },
-            })
-        );
+        const event = new XSelectEvent(this.getAttribute("x-value"));
+        this.dispatchEvent(event);
     }
 }
 

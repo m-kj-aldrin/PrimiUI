@@ -2,6 +2,10 @@
 description: Specific rules for writing javascript custom-elements
 globs: **/custom-elements/**/*.js
 ---
+Below is an updated version of the guidelines with improved guidance on child–parent communication. The new **Child–Parent Communication** section outlines the preferred approach for using custom events emitted by child elements, while still favoring event delegation where possible.
+
+---
+
 # Custom Element Development Guidelines
 
 These guidelines are intended to complement the general JavaScript rules. They focus on best practices for building robust, maintainable custom elements that work with the Light DOM, leverage event delegation, and maintain a clear separation between functionality and aesthetics.
@@ -10,59 +14,65 @@ These guidelines are intended to complement the general JavaScript rules. They f
 
 ## 1. DOM Management & Element Construction
 
--   **Avoid Shadow DOM:**  
-    Do not use Shadow DOM on custom elements.
+- **Avoid Shadow DOM:**  
+  Do not use Shadow DOM on custom elements.
 
--   **Prefer Light DOM:**  
-    Design custom elements to work with and enhance the existing Light DOM structure.  
-    Handle any missing elements gracefully.
+- **Prefer Light DOM:**  
+  Design custom elements to work with and enhance the existing Light DOM structure.  
+  Handle any missing elements gracefully.
 
--   **Minimal DOM Manipulation:**  
-    Refrain from frequently creating new DOM elements (via `document.createElement` or setting `innerHTML`). Instead, work with the HTML already present.
+- **Minimal DOM Manipulation:**  
+  Refrain from frequently creating new DOM elements (via `document.createElement` or setting `innerHTML`). Instead, work with the HTML already present.
 
--   **Event Bubbling:**  
-    Leverage native event bubbling to manage events and enable effective component communication.
+- **Event Bubbling:**  
+  Leverage native event bubbling to manage events and enable effective component communication.
 
 ---
 
 ## 2. Event Handling & Lifecycle Management
 
--   **Event Delegation:**
+- **Event Delegation:**
 
-    -   Attach a single event listener to the custom element itself rather than to multiple child elements.
-    -   Rely on event delegation and bubbling, ensuring that you always verify the event target and context before processing.
+  - Attach a single event listener to the custom element itself rather than to multiple child elements.
+  - Rely on event delegation and bubbling, ensuring that you always verify the event target and context before processing.
 
--   **Handler Binding & Lifecycle Methods:**
+- **Handler Binding & Lifecycle Methods:**
 
-    -   Bind event handlers only when necessary (e.g., when they are used as callbacks outside the delegated context).
-    -   Keep the constructor minimal. Perform setup tasks (including attaching event listeners) in the `connectedCallback` rather than in the constructor.
+  - Bind event handlers only when necessary (e.g., when they are used as callbacks outside the delegated context).
+  - Keep the constructor minimal. Perform setup tasks (including attaching event listeners) in the `connectedCallback` rather than in the constructor.
 
--   **Method Definitions:**  
-    Define event handlers as regular class methods (avoid inline arrow functions) to ensure clarity and the proper `this` context.
+- **Method Definitions:**  
+  Define event handlers as regular class methods (avoid inline arrow functions) to ensure clarity and the proper `this` context.
 
 ---
 
 ## 3. Enhancement & Reactive Patterns
 
--   **Progressive Enhancement:**  
-    Enhance the existing HTML structure instead of replacing it entirely. Provide sensible fallback behavior for users with JavaScript disabled.
+- **Progressive Enhancement:**  
+  Enhance the existing HTML structure instead of replacing it entirely. Provide sensible fallback behavior for users with JavaScript disabled.
 
--   **Custom Events & Data Attributes:**
+- **Custom Events & Data Attributes:**
 
-    -   Emit custom events to notify parent elements about state changes.
-    -   Use data attributes for configuration to maintain clear, semantic HTML.
+  - Emit custom events to notify parent elements about state changes.
+  - Use data attributes for configuration to maintain clear, semantic HTML.
 
--   **Reactive Patterns:**  
-    Favor event-driven, reactive patterns over performing a one-time scan of the DOM during initialization.  
-    Avoid caching DOM references as instance properties unless absolutely necessary; query the DOM on demand.
+- **Child–Parent Communication:**
+
+  - When a custom element child (e.g., `<custom-child>`) needs to signal a specific event (such as a selection based on a click event), let it dispatch a custom event (e.g., `"x-select"`) that bubbles up.
+  - The parent element (e.g., `<custom-parent>`) listens for this event, retrieves relevant details from the event, and acts accordingly.
+  - This pattern is **preferred** because it promotes encapsulation and loose coupling. Even if an internal element (like a `<span>`) is clicked within `<custom-child>`, the event always originates from the custom element itself, ensuring clear communication and maintainability.
+
+- **Reactive Patterns:**  
+  Favor event-driven, reactive patterns over performing a one-time scan of the DOM during initialization.  
+  Avoid caching DOM references as instance properties unless absolutely necessary; query the DOM on demand.
 
 ---
 
 ## 4. Coupling & Dependencies
 
--   **Maintain Loose Coupling:**  
-    Keep custom elements independent of their children’s internal implementations.  
-    React to events and attribute changes rather than directly manipulating child elements or assuming a fixed DOM structure.
+- **Maintain Loose Coupling:**  
+  Keep custom elements independent of their children’s internal implementations.  
+  React to events and attribute changes rather than directly manipulating child elements or assuming a fixed DOM structure.
 
 ---
 
@@ -74,30 +84,30 @@ Organize each custom element to enforce a clear separation between functionality
 
 For standalone custom elements, use three separate files:
 
--   **JavaScript Implementation:**
+- **JavaScript Implementation:**
 
-    -   **File Name:** `[custom-element-name].js`
-    -   **Purpose:** Contains the custom element definition, registration, and business logic.
+  - **File Name:** `[custom-element-name].js`
+  - **Purpose:** Contains the custom element definition, registration, and business logic.
 
--   **Functional UX Styling:**
+- **Functional UX Styling:**
 
-    -   **File Name:** `[custom-element-name].ux.css`
-    -   **Purpose:** Provides the essential CSS rules needed for the element’s operation and user interaction.
+  - **File Name:** `[custom-element-name].ux.css`
+  - **Purpose:** Provides the essential CSS rules needed for the element’s operation and user interaction.
 
--   **Aesthetic Styling:**
-    -   **File Name:** `[custom-element-name].style.css`
-    -   **Purpose:** Contains visual styling rules that use custom properties and reference an external `base.theme.css` [base.theme.css](mdc:src/custom-elements/base.theme.css). This separation allows users to adjust the look and feel without affecting the functional styles.
+- **Aesthetic Styling:**
+  - **File Name:** `[custom-element-name].style.css`
+  - **Purpose:** Contains visual styling rules that use custom properties and reference an external `base.theme.css` (or `@base.theme.css`). This separation allows users to adjust the look and feel without affecting the functional styles.
 
 ### 5.2. Hierarchical Custom Elements Organization
 
 When developing custom elements that include a primary element along with related child elements, follow this structure:
 
--   **Folder Structure:**  
-    Always place the custom element inside a dedicated folder named after the custom element's base name (e.g., `Widget/` for a "widget" element).
+- **Folder Structure:**  
+  Always place the custom element inside a dedicated folder named after the custom element's base name (e.g., `Widget/` for a "widget" element).
 
--   **File Naming & Organization:**
-    -   The **main** custom element should be defined in a file called `root.js` within the folder, and its definition should use the naming convention `[custom-element-name]-root`.
-    -   Any related **child** custom elements should be defined in their own files within the same folder. Each file should be named according to the child's role (e.g., `trigger.js`, `item.js`, etc.), with the custom element itself named `[custom-element-name]-[role]`.
+- **File Naming & Organization:**
+  - The **main** custom element should be defined in a file called `root.js` within the folder, and its definition should use the naming convention `[custom-element-name]-root`.
+  - Any related **child** custom elements should be defined in their own files within the same folder. Each file should be named according to the child's role (e.g., `trigger.js`, `item.js`, etc.), with the custom element itself named `[custom-element-name]-[role]`.
 
 **Generic Example:**  
 For a custom element named "widget" that comprises a main element (`widget-root`) and child elements (`widget-header`, `widget-body`), the file structure should be as follows:
@@ -108,3 +118,7 @@ Widget/
 ├── header.js     // Contains the definition for widget-header
 └── body.js       // Contains the definition for widget-body
 ```
+
+---
+
+This updated guidance ensures that while event delegation remains the primary strategy, clear and encapsulated communication between child and parent components is maintained through well-defined custom events.

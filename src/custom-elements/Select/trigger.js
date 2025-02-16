@@ -53,7 +53,7 @@ export class SelectTrigger extends HTMLElement {
    * Handles keydown events
    * @param {KeyboardEvent} event - The keydown event
    */
-  #handleKeydown = (event) => {
+  #handleKeydown(event) {
     if (event.key === "Escape") {
       event.preventDefault();
       const select = this.closest("select-root");
@@ -61,7 +61,7 @@ export class SelectTrigger extends HTMLElement {
         select.removeAttribute("open");
       }
     }
-  };
+  }
 }
 
 // Register the custom element if it hasn't been registered yet

@@ -1,0 +1,42 @@
+## 2. Classes and Encapsulation
+
+- **Class Structure and Methods:**
+  - Define class methods using regular method syntax, not arrow functions
+  - Use `#private` fields to encapsulate internal state and methods
+  - Arrow functions are only permitted for inline callbacks
+  - Keep classes focused with well-defined responsibilities
+
+  ```js
+  export class MyComponent {
+    // ✅ Private fields for encapsulation
+    #state;
+    #config;
+
+    constructor(initialState, config) {
+      this.#state = initialState;
+      this.#config = config;
+    }
+
+    // ✅ Regular method syntax for class methods
+    #handleData(data) {
+      this.#state = this.#processData(data);
+    }
+
+    // ✅ Arrow functions only for callbacks
+    process() {
+      setTimeout(() => this.#handleData(), 1000);
+      this.#config.items.map((item) => item.value);
+    }
+
+    // ✅ Well-defined public interface
+    getState() {
+      return this.#state;
+    }
+  }
+  ```
+
+This example demonstrates:
+- Proper method syntax (regular vs arrow functions)
+- Private field encapsulation
+- Appropriate use of arrow functions as callbacks
+- Focused class responsibilities with clear public/private interfaces 

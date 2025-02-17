@@ -1,4 +1,5 @@
 import { clickOutside } from "../../dom-utils/click-outside.js";
+import { getSiblingOfSameTag } from "../../dom-utils/traversal.js";
 
 /**
  * A custom select element that provides a dropdown list of options.
@@ -37,7 +38,9 @@ export class SelectRoot extends HTMLElement {
     this.addEventListener("keydown", this.#handleKeydown);
     this.addEventListener("x-select", this.#handleSelect);
     this.addEventListener("focusin", this.#handleFocusIn);
-    this.#clickOutsideCleanup = clickOutside(this, () => this.removeAttribute("x-open"));
+    this.#clickOutsideCleanup = clickOutside(this, () =>
+      this.removeAttribute("x-open")
+    );
     this.#setupDocumentKeydown();
   }
 
@@ -67,7 +70,11 @@ export class SelectRoot extends HTMLElement {
   /** Removes document-level keydown handler */
   #removeDocumentKeydown() {
     if (this.#documentKeydownHandler) {
-      document.removeEventListener("keydown", this.#documentKeydownHandler, true);
+      document.removeEventListener(
+        "keydown",
+        this.#documentKeydownHandler,
+        true
+      );
       this.#documentKeydownHandler = null;
     }
   }
@@ -185,44 +192,23 @@ export class SelectRoot extends HTMLElement {
     }
   }
 
-  /** @returns {import("./item").SelectItem[]} */
-  #getAvailableItems() {
-    return Array.from(this.querySelectorAll("select-item:not([x-disabled], [x-selected])"));
-  }
-
   /**
    * Navigates between items
    * @param {number} direction - The direction to navigate (1 for next, -1 for previous)
    */
   #navigateItems(direction) {
-    const items = this.#getAvailableItems();
-    if (!items.length) return;
-
-    const currentIndex = this.#focusedItem ? items.indexOf(this.#focusedItem) : -1;
-
-    let nextIndex = currentIndex + direction;
-
-    if (nextIndex < 0) nextIndex = items.length - 1;
-    if (nextIndex >= items.length) nextIndex = 0;
-
-    items[nextIndex]?.focus();
-  }
-
-  /** Sets up the click outside handler */
-  #setupClickOutside() {
-    this.#clickOutsideHandler = (event) => {
-      if (!this.contains(/** @type {Node} */ (event.target)) && this.hasAttribute("x-open")) {
-        this.removeAttribute("x-open");
-      }
-    };
-    document.addEventListener("click", this.#clickOutsideHandler);
-  }
-
-  /** Removes the click outside handler */
-  #removeClickOutside() {
-    if (this.#clickOutsideHandler) {
-      document.removeEventListener("click", this.#clickOutsideHandler);
-      this.#clickOutsideHandler = null;
+    if (!this.#focusedItem) {
+      if (direction == 1)
+        this.querySelector("select-item:first-of-type")?.focus();
+      else if (direction == -1)
+        this.querySelector("select-item:last-of-type")?.focus();
+    } else {
+      const nextItem = getSiblingOfSameTag(
+        this.#focusedItem,
+        direction,
+        ":not([x-disabled],[x-selected])"
+      );
+      nextItem.focus();
     }
   }
 }

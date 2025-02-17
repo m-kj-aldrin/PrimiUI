@@ -12,5 +12,9 @@ export function clickOutside(element, callback) {
 
   document.addEventListener("click", handleClick);
 
-  return () => document.removeEventListener("click", handleClick);
+  return () => {
+    console.log("cleanup");
+
+    document.removeEventListener("click", handleClick);
+  };
 }

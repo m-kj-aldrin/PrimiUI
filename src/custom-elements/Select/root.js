@@ -1,6 +1,6 @@
 import { clickOutside } from "../../dom-utils/click-outside.js";
 import { getSiblingOfSameTag } from "../../dom-utils/traversal.js";
-import { StateMachine } from "../../dom-utils/state.js";
+import { transitionState } from "../../dom-utils/state.js";
 
 /**
  * A custom select element that provides a dropdown list of options.
@@ -24,51 +24,88 @@ export class SelectRoot extends HTMLElement {
   /** @type {(e: KeyboardEvent) => void} */
   #documentKeydownHandler = null;
 
-  #state = new StateMachine(this, {
-    stateAttribute: "x-state",
-    stateMap: {
-      open: {
-        Enter: {
-          nextState: "closed",
-        },
-        Escape: {
-          nextState: "closed",
-        },
-        ArrowDown: {
-          action: () => {
-            this.#navigateItems(1);
-          },
-        },
-        ArrowUp: {
-          action: () => {
-            this.#navigateItems(-1);
-          },
-        },
-        Tab: {
-          action: (_, event) => {
-            this.#navigateItems(event.shiftKey ? -1 : 1);
-          },
-        },
+  /**@type {import("../../dom-utils/state.js").StateMap} */
+  #state = {
+    open: {
+      close: {
+        nextState: "close",
       },
-      closed: {
-        Enter: {
-          nextState: "open",
-        },
-        ArrowDown: {
-          nextState: "open",
-          action: () => {
-            this.#navigateItems(1);
-          },
-        },
-        ArrowUp: {
-          nextState: "open",
-          action: () => {
-            this.#navigateItems(-1);
-          },
-        },
+      toggle: {
+        nextState: "close",
       },
     },
-  });
+    close: {
+      open: {
+        nextState: "open",
+      },
+      toggle: {
+        nextState: "open",
+      },
+    },
+  };
+
+  // #state = defineStateMap({
+  //   closed: {
+  //     ["Enter| |click|select"]: {
+  //       nextState: "open",
+  //     },
+  //   },
+  //   open: {
+  //     ["Enter| |click|select"]: {
+  //       nextState: "closed",
+  //     },
+  //     ["ArrowDown|ArrowUp|Tab|TabShift"]: {
+  //       action: (element, event) => {
+  //         let dir = event == "ArrowDown" || event == "Tab" ? 1 : -1;
+  //         this.#navigateItems(dir);
+  //       },
+  //     },
+  //   },
+  // });
+
+  // #state = defineStateMap({
+  //   open: {
+  //     Enter: {
+  //       nextState: "closed",
+  //       },
+  //       Escape: {
+  //         nextState: "closed",
+  //       },
+  //       ArrowDown: {
+  //         action: () => {
+  //           this.#navigateItems(1);
+  //         },
+  //       },
+  //       ArrowUp: {
+  //         action: () => {
+  //           this.#navigateItems(-1);
+  //         },
+  //       },
+  //       Tab: {
+  //         action: (_, event) => {
+  //           this.#navigateItems(event.shiftKey ? -1 : 1);
+  //         },
+  //       },
+  //     },
+  //     closed: {
+  //       Enter: {
+  //         nextState: "open",
+  //       },
+  //       ArrowDown: {
+  //         nextState: "open",
+  //         action: () => {
+  //           this.#navigateItems(1);
+  //         },
+  //       },
+  //       ArrowUp: {
+  //         nextState: "open",
+  //         action: () => {
+  //           this.#navigateItems(-1);
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
 
   connectedCallback() {
     this.#setupAttributes();
@@ -85,9 +122,9 @@ export class SelectRoot extends HTMLElement {
     this.addEventListener("keydown", this.#handleKeydown);
     this.addEventListener("x-select", this.#handleSelect);
     this.addEventListener("focusin", this.#handleFocusIn);
-    this.#clickOutsideCleanup = clickOutside(this, () =>
-      this.#state.dispatch({ key: "Escape" })
-    );
+    // this.#clickOutsideCleanup = clickOutside(this, () =>
+    //   // this.#state.dispatch({ key: "Escape" })
+    // );
     this.#setupDocumentKeydown();
   }
 
@@ -108,7 +145,7 @@ export class SelectRoot extends HTMLElement {
       if (event.key === "Escape" && this.hasAttribute("x-open")) {
         event.preventDefault();
         event.stopPropagation();
-        this.#state.dispatch({ key: "closed" });
+        // this.#state.dispatch({ key: "closed" });
       }
     };
     document.addEventListener("keydown", this.#documentKeydownHandler, true);
@@ -157,7 +194,8 @@ export class SelectRoot extends HTMLElement {
 
     const trigger = target.closest("select-trigger");
     if (trigger) {
-      this.#state.dispatch({ key: "Enter" });
+      transitionState(this.#state, event.type, this, "x-state");
+      // this.#state.dispatch({ key: "Enter" });
     }
   }
 
@@ -168,11 +206,13 @@ export class SelectRoot extends HTMLElement {
   #handleKeydown(event) {
     if (this.hasAttribute("x-disabled")) return;
 
-    let result = this.#state.dispatch(event);
+    // let key = event.key;
+    // key += event.shiftKey ? "Shift" : "";
 
-    console.log("result");
-
+    let result = transitionState(this.#state, "toggle", this, "x-state");
     if (result) {
+      // console.log("stop");
+
       event.preventDefault();
       event.stopPropagation();
     }
@@ -187,7 +227,8 @@ export class SelectRoot extends HTMLElement {
 
     if (value !== this.getAttribute("x-value")) {
       this.setAttribute("x-value", value);
-      this.#state.dispatch({ key: "Enter" });
+      transitionState(this.#state, "select", this, "x-state");
+      // this.#state.dispatch({ key: "Enter" });
       event.name = this.getAttribute("x-name");
     } else {
       event.preventDefault();

@@ -1,4 +1,5 @@
 import { clickOutside } from "../../dom-utils/click-outside.js";
+import { documentKeyHandler } from "../../dom-utils/document-key-handler.js";
 import { getSiblingOfSameTag } from "../../dom-utils/traversal.js";
 
 /**
@@ -17,8 +18,11 @@ export class SelectRoot extends HTMLElement {
   /** @type {() => void} */
   #clickOutsideCleanup = null;
 
-  /** @type {(e: KeyboardEvent) => void} */
-  #documentKeydownHandler = null;
+  /** @type {() => void} */
+  #documentKeydownCleanup = null;
+
+  /**@type {AbortController} */
+  #controller;
 
   connectedCallback() {
     this.#setupAttributes();
@@ -31,50 +35,36 @@ export class SelectRoot extends HTMLElement {
   }
 
   #setupEventListeners() {
-    this.addEventListener("click", this.#handleClick);
-    this.addEventListener("keydown", this.#handleKeydown);
-    this.addEventListener("x-select", this.#handleSelect);
-    this.addEventListener("focusin", this.#handleFocusIn);
-    this.#clickOutsideCleanup = clickOutside(this, () =>
-      this.setAttribute("x-state", "closed")
-    );
-    this.#setupDocumentKeydown();
+    this.#controller = new AbortController();
+    let signal = this.#controller.signal;
+
+    this.addEventListener("click", this.#handleClick, { signal });
+    this.addEventListener("keydown", this.#handleKeydown, { signal });
+    this.addEventListener("x-select", this.#handleSelect, { signal });
+    this.addEventListener("focusin", this.#handleFocusIn, { signal });
+
+    this.#clickOutsideCleanup = clickOutside(this, () => this.setAttribute("x-state", "closed"));
   }
 
   disconnectedCallback() {
-    this.removeEventListener("click", this.#handleClick);
-    this.removeEventListener("keydown", this.#handleKeydown);
-    this.removeEventListener("x-select", this.#handleSelect);
-    this.removeEventListener("focusin", this.#handleFocusIn);
+    this.#controller.abort();
+
     this.#clickOutsideCleanup();
-    this.#removeDocumentKeydown();
   }
 
   /**
    * Sets up document-level keydown handler for Escape key
+   * @param {KeyboardEvent} event - The keydown event
    */
-  #setupDocumentKeydown() {
-    this.#documentKeydownHandler = (event) => {
-      let key = event.key;
-      let state = this.getAttribute("x-state");
-      if (key === "Escape" && state == "open") {
-        this.setAttribute("x-state", "closed");
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    };
-    document.addEventListener("keydown", this.#documentKeydownHandler, true);
-  }
+  #documentEscHandler(event) {
+    let key = event.key;
 
-  /** Removes document-level keydown handler */
-  #removeDocumentKeydown() {
-    if (this.#documentKeydownHandler) {
-      document.removeEventListener(
-        "keydown",
-        this.#documentKeydownHandler,
-        true
-      );
-      this.#documentKeydownHandler = null;
+    let state = this.getAttribute("x-state");
+
+    if (key === "Escape" && state == "open") {
+      this.setAttribute("x-state", "closed");
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 
@@ -95,6 +85,9 @@ export class SelectRoot extends HTMLElement {
       if (state === "closed") {
         this.querySelector("select-trigger")?.focus();
         this.#focusedItem = null;
+        this.#documentKeydownCleanup?.();
+      } else if (state === "open") {
+        this.#documentKeydownCleanup = documentKeyHandler(this.#documentEscHandler.bind(this));
       }
     }
   }
@@ -202,9 +195,7 @@ export class SelectRoot extends HTMLElement {
    */
   #navigateItems(direction) {
     if (!this.#focusedItem) {
-      let collection = this.querySelectorAll(
-        "select-item:not([x-disabled],[x-selected])"
-      );
+      let collection = this.querySelectorAll("select-item:not([x-disabled],[x-selected])");
       if (direction == 1) collection[0]?.focus();
       else if (direction == -1) collection[collection.length - 1]?.focus();
     } else {

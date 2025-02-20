@@ -1,6 +1,5 @@
 import { clickOutside } from "../../dom-utils/click-outside.js";
 import { getSiblingOfSameTag } from "../../dom-utils/traversal.js";
-import { transitionState } from "../../dom-utils/state.js";
 
 /**
  * A custom select element that provides a dropdown list of options.
@@ -15,97 +14,11 @@ export class SelectRoot extends HTMLElement {
   /** @type {import("./item").SelectItem | null} */
   #focusedItem = null;
 
-  /** @type {(e: MouseEvent) => void} */
-  #clickOutsideHandler = null;
-
   /** @type {() => void} */
   #clickOutsideCleanup = null;
 
   /** @type {(e: KeyboardEvent) => void} */
   #documentKeydownHandler = null;
-
-  /**@type {import("../../dom-utils/state.js").StateMap} */
-  #state = {
-    open: {
-      close: {
-        nextState: "close",
-      },
-      toggle: {
-        nextState: "close",
-      },
-    },
-    close: {
-      open: {
-        nextState: "open",
-      },
-      toggle: {
-        nextState: "open",
-      },
-    },
-  };
-
-  // #state = defineStateMap({
-  //   closed: {
-  //     ["Enter| |click|select"]: {
-  //       nextState: "open",
-  //     },
-  //   },
-  //   open: {
-  //     ["Enter| |click|select"]: {
-  //       nextState: "closed",
-  //     },
-  //     ["ArrowDown|ArrowUp|Tab|TabShift"]: {
-  //       action: (element, event) => {
-  //         let dir = event == "ArrowDown" || event == "Tab" ? 1 : -1;
-  //         this.#navigateItems(dir);
-  //       },
-  //     },
-  //   },
-  // });
-
-  // #state = defineStateMap({
-  //   open: {
-  //     Enter: {
-  //       nextState: "closed",
-  //       },
-  //       Escape: {
-  //         nextState: "closed",
-  //       },
-  //       ArrowDown: {
-  //         action: () => {
-  //           this.#navigateItems(1);
-  //         },
-  //       },
-  //       ArrowUp: {
-  //         action: () => {
-  //           this.#navigateItems(-1);
-  //         },
-  //       },
-  //       Tab: {
-  //         action: (_, event) => {
-  //           this.#navigateItems(event.shiftKey ? -1 : 1);
-  //         },
-  //       },
-  //     },
-  //     closed: {
-  //       Enter: {
-  //         nextState: "open",
-  //       },
-  //       ArrowDown: {
-  //         nextState: "open",
-  //         action: () => {
-  //           this.#navigateItems(1);
-  //         },
-  //       },
-  //       ArrowUp: {
-  //         nextState: "open",
-  //         action: () => {
-  //           this.#navigateItems(-1);
-  //         },
-  //       },
-  //     },
-  //   },
-  // });
 
   connectedCallback() {
     this.#setupAttributes();
@@ -122,9 +35,9 @@ export class SelectRoot extends HTMLElement {
     this.addEventListener("keydown", this.#handleKeydown);
     this.addEventListener("x-select", this.#handleSelect);
     this.addEventListener("focusin", this.#handleFocusIn);
-    // this.#clickOutsideCleanup = clickOutside(this, () =>
-    //   // this.#state.dispatch({ key: "Escape" })
-    // );
+    this.#clickOutsideCleanup = clickOutside(this, () =>
+      this.setAttribute("x-state", "closed")
+    );
     this.#setupDocumentKeydown();
   }
 
@@ -142,10 +55,12 @@ export class SelectRoot extends HTMLElement {
    */
   #setupDocumentKeydown() {
     this.#documentKeydownHandler = (event) => {
-      if (event.key === "Escape" && this.hasAttribute("x-open")) {
+      let key = event.key;
+      let state = this.getAttribute("x-state");
+      if (key === "Escape" && state == "open") {
+        this.setAttribute("x-state", "closed");
         event.preventDefault();
         event.stopPropagation();
-        // this.#state.dispatch({ key: "closed" });
       }
     };
     document.addEventListener("keydown", this.#documentKeydownHandler, true);
@@ -194,8 +109,8 @@ export class SelectRoot extends HTMLElement {
 
     const trigger = target.closest("select-trigger");
     if (trigger) {
-      transitionState(this.#state, event.type, this, "x-state");
-      // this.#state.dispatch({ key: "Enter" });
+      let state = this.getAttribute("x-state");
+      this.setAttribute("x-state", state == "closed" ? "open" : "closed");
     }
   }
 
@@ -206,13 +121,29 @@ export class SelectRoot extends HTMLElement {
   #handleKeydown(event) {
     if (this.hasAttribute("x-disabled")) return;
 
-    // let key = event.key;
-    // key += event.shiftKey ? "Shift" : "";
+    let state = this.getAttribute("x-state");
+    let key = event.key + (event.shiftKey ? "Shift" : "");
 
-    let result = transitionState(this.#state, "toggle", this, "x-state");
-    if (result) {
-      // console.log("stop");
+    if (!/Enter| |ArrowUp|ArrowDown|Tab|TabShift/.test(key)) return;
 
+    let prevent = false;
+
+    if (state == "closed") {
+      if (/Enter| |ArrowUp|ArrowDown/.test(key)) {
+        this.setAttribute("x-state", "open");
+        prevent = true;
+      }
+    } else if (state == "open") {
+      if (/Enter| /.test(key)) {
+        this.setAttribute("x-state", "closed");
+        prevent = true;
+      } else if (/ArrowUp|ArrowDown|Tab|TabShift/.test(key)) {
+        this.#navigateItems(key == "ArrowDown" || key == "Tab" ? 1 : -1);
+        prevent = true;
+      }
+    }
+
+    if (prevent) {
       event.preventDefault();
       event.stopPropagation();
     }
@@ -227,8 +158,7 @@ export class SelectRoot extends HTMLElement {
 
     if (value !== this.getAttribute("x-value")) {
       this.setAttribute("x-value", value);
-      transitionState(this.#state, "select", this, "x-state");
-      // this.#state.dispatch({ key: "Enter" });
+      this.setAttribute("x-state", "closed");
       event.name = this.getAttribute("x-name");
     } else {
       event.preventDefault();

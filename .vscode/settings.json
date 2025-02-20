@@ -6,5 +6,6 @@
     "css.customData": [
         "./.vscode/custom-data/select.css-data.json",
         "./.vscode/custom-data/input.css-data.json"
-    ]
+    ],
+    "liveServer.settings.port": 5501
 }

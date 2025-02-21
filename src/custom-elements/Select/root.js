@@ -43,7 +43,9 @@ export class SelectRoot extends HTMLElement {
     this.addEventListener("x-select", this.#handleSelect, { signal });
     this.addEventListener("focusin", this.#handleFocusIn, { signal });
 
-    this.#clickOutsideCleanup = clickOutside(this, () => this.setAttribute("x-state", "closed"));
+    this.#clickOutsideCleanup = clickOutside(this, () =>
+      this.setAttribute("x-state", "closed")
+    );
   }
 
   disconnectedCallback() {
@@ -78,7 +80,6 @@ export class SelectRoot extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === "x-value") {
       this.#updateSelectedItem();
-    } else if (name === "x-disabled") {
     } else if (name === "x-state") {
       let state = newValue;
 
@@ -87,7 +88,9 @@ export class SelectRoot extends HTMLElement {
         this.#focusedItem = null;
         this.#documentKeydownCleanup?.();
       } else if (state === "open") {
-        this.#documentKeydownCleanup = documentKeyHandler(this.#documentEscHandler.bind(this));
+        this.#documentKeydownCleanup = documentKeyHandler(
+          this.#documentEscHandler.bind(this)
+        );
       }
     }
   }
@@ -195,7 +198,9 @@ export class SelectRoot extends HTMLElement {
    */
   #navigateItems(direction) {
     if (!this.#focusedItem) {
-      let collection = this.querySelectorAll("select-item:not([x-disabled],[x-selected])");
+      let collection = this.querySelectorAll(
+        "select-item:not([x-disabled],[x-selected])"
+      );
       if (direction == 1) collection[0]?.focus();
       else if (direction == -1) collection[collection.length - 1]?.focus();
     } else {
